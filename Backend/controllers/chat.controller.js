@@ -12,6 +12,7 @@ export const generateResponse = async ({ question, style, type }) => {
       JSON.stringify(previousReponse[length - 2]) +
       JSON.stringify(previousReponse[length - 1]);
   }
+
   const query =
     SYSTEM_PROMPT +
     "\n\n" +
