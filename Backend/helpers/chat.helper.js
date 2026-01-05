@@ -1,6 +1,6 @@
 let previousReponse = [];
 
-//for summarizing the previous chat to pass as context 
+//for summarizing the previous chat to pass as context
 export const summarize = async (question, data) => {
   const res = await fetch(
     `${process.env.AI_API_URL}/${data}\nSummarize in simple word`
@@ -21,4 +21,9 @@ export const getPrevious = () => {
       JSON.stringify(previousReponse[length - 1]);
   }
   return previous;
+};
+
+export const randomSeed = () => {
+  const number = (Math.random() * 100000).toFixed(0);
+  return number;
 };
