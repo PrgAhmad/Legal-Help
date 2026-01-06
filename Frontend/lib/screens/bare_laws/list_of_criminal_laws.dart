@@ -26,11 +26,9 @@ class _ListOfCriminalLawsState extends State<ListOfCriminalLaws> {
     initPref();
   }
 
-  void initPref() async{
+  void initPref() async {
     pref = await SharedPreferences.getInstance();
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   Widget build(BuildContext context) {
@@ -43,7 +41,7 @@ class _ListOfCriminalLawsState extends State<ListOfCriminalLaws> {
           crossAxisCount: 2,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
-          mainAxisExtent: 180,
+          mainAxisExtent: 200,
         ),
         itemCount: criminalLaws.length,
         itemBuilder: (context, idx) {
@@ -54,25 +52,54 @@ class _ListOfCriminalLawsState extends State<ListOfCriminalLaws> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return SectionAndChapters(lawData: criminalLaws[idx],);
+                    return SectionAndChapters(lawData: criminalLaws[idx]);
                   },
                 ),
               );
             },
             child: MyContainer(
               margin: EdgeInsets.only(top: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 15,
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  Image(
-                    image: AssetImage(pref.getBool(themeMode)! ? "assets/images/ashok_stambh_light.png" : "assets/images/ashok_stambh_dark.png"),
-                    height: 75,
-                  ),
-                  MyText(
-                    criminalLaws[idx]["name"],
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                  criminalLaws[idx].containsKey("isNew")
+                      ? Positioned(
+                        top: 0,
+                        right: 0,
+                        child: MyContainer(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 2,
+                            horizontal: 5,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                          color: Theme.of(context).colorScheme.primary,
+                          child: MyText(
+                            "new",
+                            color: Theme.of(context).colorScheme.tertiaryFixed,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      )
+                      : SizedBox.shrink(),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 15,
+                    children: [
+                      Image(
+                        image: AssetImage(
+                          pref.getBool(themeMode)!
+                              ? "assets/images/ashok_stambh_light.png"
+                              : "assets/images/ashok_stambh_dark.png",
+                        ),
+                        height: 95,
+                      ),
+                      MyText(
+                        criminalLaws[idx]["name"],
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ],
                   ),
                 ],
               ),

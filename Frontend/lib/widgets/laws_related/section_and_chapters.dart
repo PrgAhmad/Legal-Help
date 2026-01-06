@@ -32,7 +32,7 @@ class _SectionAndChaptersState extends State<SectionAndChapters> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(context, title: widget.lawData["name"], fontSize: 15),
+      appBar: MyAppBar(context, title: widget.lawData["name"].toString().replaceAll("\n", ""), fontSize: 15),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -49,7 +49,7 @@ class _SectionAndChaptersState extends State<SectionAndChapters> {
                     builder:
                         (context) => ListOfChapters(
                           jsonPath: widget.lawData["jsonPath"],
-                          lawName: widget.lawData["name"],
+                          lawName: widget.lawData["name"].toString().replaceAll("\n", ""),
                         ),
                   ),
                 );
@@ -65,7 +65,7 @@ class _SectionAndChaptersState extends State<SectionAndChapters> {
                     builder:
                         (context) => ListOfSections(
                           jsonPath: widget.lawData["jsonPath"],
-                          lawName: widget.lawData["name"],
+                          lawName: widget.lawData["name"].toString().replaceAll("\n", ""),
                         ),
                   ),
                 );

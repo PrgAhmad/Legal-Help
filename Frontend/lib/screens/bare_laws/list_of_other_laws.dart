@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:frontend/constants.dart';
 import 'package:frontend/widgets/laws_related/list_of_sections.dart';
 import 'package:frontend/widgets/laws_related/section_and_chapters.dart';
@@ -7,12 +9,13 @@ import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ListOfCivilLaws extends StatefulWidget {
+class ListOfOtherLaws extends StatefulWidget {
   @override
-  State<ListOfCivilLaws> createState() => _ListOfCivilLawsState();
+  State<ListOfOtherLaws> createState() => _ListOfOtherLawsState();
 }
 
-class _ListOfCivilLawsState extends State<ListOfCivilLaws> {
+class _ListOfOtherLawsState extends State<ListOfOtherLaws> {
+
   late SharedPreferences pref;
 
   @override
@@ -32,16 +35,16 @@ class _ListOfCivilLawsState extends State<ListOfCivilLaws> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: MyAppBar(context, title: "Civil Laws"),
+      appBar: MyAppBar(context, title: "Other Laws"),
       body: GridView.builder(
         padding: EdgeInsets.all(10),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
-          mainAxisExtent: 180,
+          mainAxisExtent: 200,
         ),
-        itemCount: civilLaws.length,
+        itemCount: otherLaws.length,
         itemBuilder: (context, idx) {
           return InkWell(
             borderRadius: BorderRadius.circular(10),
@@ -50,7 +53,7 @@ class _ListOfCivilLawsState extends State<ListOfCivilLaws> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return SectionAndChapters(lawData: civilLaws[idx]);
+                    return SectionAndChapters(lawData: otherLaws[idx]);
                   },
                 ),
               );
@@ -63,11 +66,11 @@ class _ListOfCivilLawsState extends State<ListOfCivilLaws> {
                 children: [
                   Image(
                     image: AssetImage(pref.getBool(themeMode)! ? "assets/images/ashok_stambh_light.png" : "assets/images/ashok_stambh_dark.png"),
-                    height: 75,
+                    height: 95,
                   ),
                   MyText(
-                    civilLaws[idx]["name"],
-                    fontSize: 14,
+                    otherLaws[idx]["name"],
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                   ),
                 ],

@@ -9,7 +9,7 @@ export const generateResponse = async ({ question, style, type }) => {
     ANSWER_STYLE[style] +
     ANSWER_TYPE[type] +
     previous +
-    "\n\nUser Question : " +
+    "\nUser Question : " +
     question;
 
   console.log(query);
