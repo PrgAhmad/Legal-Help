@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/constants.dart';
+import 'package:frontend/constants/constants.dart';
 import 'package:frontend/screens/home/widgets/categories.dart';
 import 'package:frontend/screens/home/widgets/others.dart';
 import 'package:frontend/screens/home/widgets/welcome.dart';

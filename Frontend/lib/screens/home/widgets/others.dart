@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/routes.dart';
 import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
 
@@ -14,7 +15,9 @@ Widget Others(BuildContext context){
     shrinkWrap: true,
     children: [
       InkWell(
-        onTap: (){},
+        onTap: (){
+          Navigator.pushNamed(context, MyRoutes.judgements);
+        },
         borderRadius: BorderRadius.circular(10),
         child: MyContainer(
           child: Row(
@@ -23,7 +26,7 @@ Widget Others(BuildContext context){
             children: [
               Icon(Icons.gavel_rounded, color: Theme.of(context).colorScheme.primary),
               MyText(
-                "Judgment",
+                "Judgement",
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),

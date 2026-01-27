@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/models/all_laws_model.dart';
-import 'package:frontend/widgets/laws_related/my_search.dart';
+import 'package:frontend/widgets/bottom_details.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
 import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_scroll_bar.dart';
@@ -13,10 +13,17 @@ import 'package:frontend/widgets/my_text.dart';
 class ListOfSectionAfterChapter extends StatefulWidget {
   String lawName = "";
   String chapterName = "";
+  String chapterNo = "";
   List sections = [];
-  ListOfSectionAfterChapter({required this.lawName, required this.chapterName, required this.sections});
+  ListOfSectionAfterChapter({
+    required this.lawName,
+    required this.chapterName,
+    required this.sections,
+    required this.chapterNo,
+  });
   @override
-  State<ListOfSectionAfterChapter> createState() => _ListOfSectionAfterChapterState();
+  State<ListOfSectionAfterChapter> createState() =>
+      _ListOfSectionAfterChapterState();
 }
 
 class _ListOfSectionAfterChapterState extends State<ListOfSectionAfterChapter> {
@@ -50,7 +57,12 @@ class _ListOfSectionAfterChapterState extends State<ListOfSectionAfterChapter> {
               scrollCtrl: scrollCtrl,
               child: ListView.builder(
                 controller: scrollCtrl,
-                padding: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
+                padding: EdgeInsets.only(
+                  left: 10,
+                  right: 10,
+                  bottom: 10,
+                  top: 10,
+                ),
                 itemCount: widget.sections.length,
                 itemBuilder: (context, idx) {
                   AllLawsModel eachSection = widget.sections[idx];
@@ -70,30 +82,28 @@ class _ListOfSectionAfterChapterState extends State<ListOfSectionAfterChapter> {
                         );
                       },
                       child: MyContainer(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.fromLTRB(10,15,15,15),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           spacing: 10,
                           children: [
                             MyContainer(
-                                width: 4,
-                                color: Theme.of(context).colorScheme.primary,
-                                height: 70
+                              width: 4,
+                              color: Theme.of(context).colorScheme.primary,
+                              height: 70,
                             ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                spacing: 5,
+                                spacing: 10,
                                 children: [
-                                  MyText(
-                                    "Section " + widget.sections[idx].sectionNo,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15,
-                                  ),
                                   MyText(
                                     widget.sections[idx].sectionTitle,
                                     textAlign: TextAlign.start,
+                                  ),
+                                  BottomDetails(
+                                    leftText:
+                                        "Section ${widget.sections[idx].sectionNo}",
+                                    rightText: "Chapter ${widget.chapterNo}",
                                   ),
                                 ],
                               ),

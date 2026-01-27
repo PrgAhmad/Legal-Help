@@ -22,17 +22,15 @@ class BrowseContainer extends StatelessWidget{
           children: [
             MyText("Browse with ${text}", fontSize: 13, fontWeight: FontWeight.w600,),
             MyContainer(
-              color: Theme.of(context).colorScheme.primary,
-              padding: EdgeInsets.symmetric(
-                vertical: 3,
-                horizontal: 8,
-              ),
-              borderRadius: BorderRadius.circular(5),
+              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+              borderRadius: BorderRadius.circular(7),
+              border: Border.all(color: Colors.blue, width: 0.5),
               child: MyText(
                 "Total ${text} : ${total}",
-                fontWeight: FontWeight.w600,
-                fontSize: 11.5,
-                color: Theme.of(context).colorScheme.tertiaryFixed,
+                fontSize: 11,
+                color: Colors.blue,
+                fontWeight: FontWeight.w500,
+                textAlign: TextAlign.left,
               ),
             ),
           ],

@@ -14,21 +14,43 @@ dependencies:
   shared_preferences: ^2.5.3
   http: ^1.6.0
   flutter_streaming_text_markdown: ^1.3.2
+  flutter_tts: ^4.2.5
+  share_plus: ^12.0.1
+  flutter_native_splash: ^2.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: "^0.14.4"
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/legal_help_icon.png"
+  min_sdk_android: 21
+
+flutter_native_splash:
+  color: "#F8FAFC"
+  image: "assets/legal_help_icon.png"
+  android: true
+  ios: true
+  fullscreen: true
+
+
+
 
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/logos/
     - assets/laws_in_json/
     - assets/laws_in_json/criminal_law/
     - assets/laws_in_json/civil_law/
     - assets/laws_in_json/other_laws/
+    - assets/courts_images/
 #     - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

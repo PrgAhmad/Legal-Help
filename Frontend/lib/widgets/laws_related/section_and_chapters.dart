@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/constants.dart';
 import 'package:frontend/widgets/laws_related/widgets/browse_container.dart';
-import 'package:frontend/widgets/laws_related/widgets/law_date.dart';
 import 'package:frontend/widgets/laws_related/list_of_chapters.dart';
 import 'package:frontend/widgets/laws_related/list_of_sections.dart';
 import 'package:frontend/widgets/laws_related/widgets/law_detail_info.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
-import 'package:frontend/widgets/my_container.dart';
-import 'package:frontend/widgets/my_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SectionAndChapters extends StatefulWidget {

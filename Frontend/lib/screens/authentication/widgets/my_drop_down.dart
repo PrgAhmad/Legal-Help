@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
@@ -9,12 +10,14 @@ class MyDropDown extends StatelessWidget {
   String labelText;
   String hintText;
   List entries;
+  Function(String?)? onSelected;
   MyDropDown({
     required this.controller,
     required this.labelText,
     required this.hintText,
     required this.entries,
     required this.icon,
+    this.onSelected
   });
 
   Widget build(BuildContext context) {
@@ -29,10 +32,14 @@ class MyDropDown extends StatelessWidget {
         MyContainer(
           padding: EdgeInsets.only(left: 10),
           child: Row(
-            spacing: 6,
             children: [
               Icon(icon, color: Theme.of(context).colorScheme.primary),
               DropdownMenu(
+                onSelected: (val){
+                  if(onSelected != null){
+                    onSelected!(val);
+                  }
+                },
                 inputDecorationTheme: InputDecorationTheme(
                   constraints: BoxConstraints(maxHeight: 50),
                   hintStyle: GoogleFonts.poppins(

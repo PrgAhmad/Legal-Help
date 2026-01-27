@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/constants.dart';
+import 'package:frontend/constants/constants.dart';
+import 'package:frontend/constants/criminals.dart';
 import 'package:frontend/widgets/laws_related/list_of_chapters.dart';
 import 'package:frontend/widgets/laws_related/list_of_sections.dart';
 import 'package:frontend/widgets/laws_related/section_and_chapters.dart';
@@ -41,7 +42,7 @@ class _ListOfCriminalLawsState extends State<ListOfCriminalLaws> {
           crossAxisCount: 2,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
-          mainAxisExtent: 200,
+          mainAxisExtent: 190,
         ),
         itemCount: criminalLaws.length,
         itemBuilder: (context, idx) {
@@ -68,15 +69,18 @@ class _ListOfCriminalLawsState extends State<ListOfCriminalLaws> {
                         right: 0,
                         child: MyContainer(
                           padding: EdgeInsets.symmetric(
-                            vertical: 2,
-                            horizontal: 5,
+                            vertical: 3,
+                            horizontal: 7,
                           ),
-                          borderRadius: BorderRadius.circular(5),
-                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(7),
+                          border: Border.all(
+                            color: Colors.green,
+                            width: 0.5,
+                          ),
                           child: MyText(
-                            "new",
-                            color: Theme.of(context).colorScheme.tertiaryFixed,
-                            fontSize: 10,
+                            "New",
+                            color: Colors.green,
+                            fontSize: 9.5,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -84,7 +88,7 @@ class _ListOfCriminalLawsState extends State<ListOfCriminalLaws> {
                       : SizedBox.shrink(),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 15,
+                    spacing: 10,
                     children: [
                       Image(
                         image: AssetImage(
@@ -96,7 +100,6 @@ class _ListOfCriminalLawsState extends State<ListOfCriminalLaws> {
                       ),
                       MyText(
                         criminalLaws[idx]["name"],
-                        fontSize: 13,
                         fontWeight: FontWeight.w700,
                       ),
                     ],

@@ -17,4 +17,5 @@ router.get("/predict_prompts", async (req, res) => {
   res.send(predictedPrompts);
 });
 
+
 export default router;

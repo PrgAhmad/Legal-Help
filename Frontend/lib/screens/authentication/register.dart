@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/authentication/lawyer/next_register.dart';
+import 'package:frontend/screens/authentication/lawyer/address_details.dart';
 import 'package:frontend/screens/authentication/user/next_register.dart';
 import 'package:frontend/screens/authentication/widgets/my_button.dart';
 import 'package:frontend/screens/authentication/widgets/my_dob_input.dart';
@@ -9,12 +9,12 @@ import 'package:frontend/screens/authentication/widgets/my_input.dart';
 import 'package:frontend/screens/authentication/widgets/my_radio_button.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
 
-class UserRegister extends StatefulWidget {
+class Register extends StatefulWidget {
   @override
-  State<UserRegister> createState() => _UserRegisterState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _UserRegisterState extends State<UserRegister> {
+class _RegisterState extends State<Register> {
   TextEditingController fullNameCtrl = TextEditingController();
   TextEditingController emailIdCtrl = TextEditingController();
   TextEditingController mobileNoCtrl = TextEditingController();
@@ -132,7 +132,7 @@ class _UserRegisterState extends State<UserRegister> {
                       MaterialPageRoute(
                         builder: (context) {
                           if (isLaywer) {
-                            return LawyerNextRegister(formData);
+                            return AddressDetails(formData);
                           } else {
                             return UserNextRegister(formData);
                           }

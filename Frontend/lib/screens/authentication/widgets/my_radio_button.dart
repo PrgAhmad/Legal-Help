@@ -25,6 +25,7 @@ class _MyRadioButtonState extends State<MyRadioButton> {
             Radio(
               value: "Yes",
               groupValue: widget.isLawyer ? "Yes" : "No",
+
               onChanged: (val) {
                 setState(() {
                   widget.setIsLawyer(true);

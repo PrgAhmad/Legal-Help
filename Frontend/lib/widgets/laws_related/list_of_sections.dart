@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/models/all_laws_model.dart';
+import 'package:frontend/widgets/bottom_details.dart';
 import 'package:frontend/widgets/laws_related/my_search.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
 import 'package:frontend/widgets/my_container.dart';
@@ -71,8 +72,6 @@ class _ListOfSectionsState extends State<ListOfSections> {
                         );
                       },
                       child: MyContainer(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.fromLTRB(10, 15, 15, 15),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           spacing: 10,
@@ -85,17 +84,14 @@ class _ListOfSectionsState extends State<ListOfSections> {
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                spacing: 5,
+                                spacing: 10,
                                 children: [
-                                  MyText(
-                                    "Section " + allLaws[idx].sectionNo,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15,
-                                  ),
-                                  MyText(
+                                 MyText(
                                     allLaws[idx].sectionTitle,
                                     textAlign: TextAlign.start,
+                                   fontWeight: FontWeight.w500,
                                   ),
+                                  BottomDetails(leftText: "Section ${allLaws[idx].sectionNo}"),
                                 ],
                               ),
                             ),

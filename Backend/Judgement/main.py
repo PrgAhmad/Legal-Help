@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 import requests
+
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
@@ -9,7 +10,6 @@ headers = {"User-Agent": "Mozilla/5.0"}
 
 app = FastAPI()
 
-# Allow Flutter app to call this API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -20,7 +20,6 @@ app.add_middleware(
 
 
 def parse_judgment_list(soup):
-    """Extract 10 judgments data from search result page."""
     results = []
 
     for block in soup.select("div.result"):

@@ -37,7 +37,7 @@ class _MyInputState extends State<MyInput> {
           child: MyText(widget.labelText!, fontSize: 13),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 0),
+          padding: EdgeInsets.only(left: 10),
           width: widget.width ?? double.infinity,
           alignment: Alignment.center,
           decoration: BoxDecoration(
@@ -52,32 +52,39 @@ class _MyInputState extends State<MyInput> {
             ],
             border: Border.all(color: Theme.of(context).colorScheme.outline),
           ),
-          child: TextFormField(
-            controller: widget.controller,
-            style: GoogleFonts.poppins(
-              color: Theme.of(context).colorScheme.tertiary,
-              fontSize: 13,
-            ),
-            keyboardType: widget.inputType ?? widget.inputType,
-            obscureText:
-                widget.obscureText == null ? false : widget.obscureText!,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 12),
-              hintText: widget.hintText!,
-              suffixIcon:
-                  widget.suffixIcon != null
-                      ? widget.suffixIcon
-                      : SizedBox.shrink(),
-              prefixIcon: Icon(
+          child: Row(
+            children: [
+              Icon(
                 widget.prefixIcon,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              border: InputBorder.none,
-              hintStyle: GoogleFonts.poppins(
-                color: Theme.of(context).colorScheme.scrim,
-                fontSize: 12.5,
+              Expanded(
+                child: TextFormField(
+                  controller: widget.controller,
+                  style: GoogleFonts.poppins(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontSize: 13,
+                  ),
+                  keyboardType: widget.inputType ?? widget.inputType,
+                  obscureText:
+                      widget.obscureText == null ? false : widget.obscureText!,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    hintText: widget.hintText!,
+                    border: InputBorder.none,
+                    hintStyle: GoogleFonts.poppins(
+                      color: Theme.of(context).colorScheme.scrim,
+                      fontSize: 12.5,
+                    ),
+                  ),
+                ),
               ),
-            ),
+              if (widget.suffixIcon != null)
+                Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: widget.suffixIcon!,
+                ),
+            ],
           ),
         ),
       ],

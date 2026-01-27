@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/constants.dart';
+import 'package:frontend/constants/constants.dart';
 import 'package:frontend/widgets/laws_related/widgets/law_date.dart';
 import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
@@ -73,7 +73,7 @@ class _LawDetailInfoState extends State<LawDetailInfo> {
                           color: Theme.of(context).colorScheme.tertiary,
                         ),
                         LawDate(
-                          text: "Applicable From ",
+                          text: "Applicable From",
                           date: widget.lawData["applicableFrom"],
                           color: Colors.green,
                         ),
@@ -86,7 +86,7 @@ class _LawDetailInfoState extends State<LawDetailInfo> {
           ),
           MyContainer(
             padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(7),
             color: Theme.of(context).colorScheme.primary,
             child: MyText(
               widget.lawData["ministry"],

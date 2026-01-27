@@ -22,8 +22,8 @@ class MyButton extends StatelessWidget {
             spacing: 8,
             mainAxisSize: MainAxisSize.min,
             children: [
-              MyText(text, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.tertiary),
-              Icon(icon, color: Theme.of(context).colorScheme.tertiary, size: 20,),
+              MyText(text, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.tertiaryFixed),
+              Icon(icon, color: Theme.of(context).colorScheme.tertiaryFixed, size: 20,),
             ],
           ),
         ),

@@ -18,10 +18,10 @@ class LawDate extends StatelessWidget {
         MyContainer(
           padding: EdgeInsets.symmetric(
             vertical: 3,
-            horizontal: 5,
+            horizontal: 7,
           ),
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: color, width: 0.4),
+          borderRadius: BorderRadius.circular(7),
+          border: Border.all(color: color, width: 0.5),
           child: MyText(
             date,
             fontSize: 10,

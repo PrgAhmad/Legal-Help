@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/constants.dart';
+import 'package:frontend/constants/constants.dart';
+import 'package:frontend/constants/civils.dart';
 import 'package:frontend/widgets/laws_related/list_of_sections.dart';
 import 'package:frontend/widgets/laws_related/section_and_chapters.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
@@ -39,7 +40,7 @@ class _ListOfCivilLawsState extends State<ListOfCivilLaws> {
           crossAxisCount: 2,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
-          mainAxisExtent: 200,
+          mainAxisExtent: 190,
         ),
         itemCount: civilLaws.length,
         itemBuilder: (context, idx) {
@@ -59,7 +60,7 @@ class _ListOfCivilLawsState extends State<ListOfCivilLaws> {
               margin: EdgeInsets.only(top: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 15,
+                spacing: 10,
                 children: [
                   Image(
                     image: AssetImage(pref.getBool(themeMode)! ? "assets/images/ashok_stambh_light.png" : "assets/images/ashok_stambh_dark.png"),
@@ -67,7 +68,6 @@ class _ListOfCivilLawsState extends State<ListOfCivilLaws> {
                   ),
                   MyText(
                     civilLaws[idx]["name"],
-                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                   ),
                 ],

@@ -9,22 +9,26 @@ class MyText extends StatelessWidget {
   double? fontSize;
   FontWeight? fontWeight;
   TextAlign? textAlign;
+  TextOverflow overflow;
   MyText(
     this.text, {
     this.color,
     this.fontSize,
     this.fontWeight,
     this.textAlign = TextAlign.center,
+    this.overflow = TextOverflow.visible,
   });
+  @override
   Widget build(BuildContext context) {
     return Text(
       text,
       style: GoogleFonts.poppins(
-        fontSize: fontSize,
+        fontSize: fontSize ?? 12.5,
         fontWeight: fontWeight,
         color: color ?? Theme.of(context).colorScheme.tertiary,
       ),
       textAlign: textAlign,
+      overflow: overflow,
     );
   }
 }

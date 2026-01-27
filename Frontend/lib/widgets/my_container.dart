@@ -24,11 +24,13 @@ class MyContainer extends StatelessWidget {
     this.isShadow = true,
   });
 
+  @override
   Widget build(BuildContext context) {
-    return Ink(
+    return Container(
       width: width,
       height: height,
       padding: padding ?? EdgeInsets.all(10),
+      // margin: margin ?? EdgeInsets.zero,
       decoration: BoxDecoration(
         color: color ?? Theme.of(context).colorScheme.secondary,
         borderRadius: borderRadius ?? BorderRadius.circular(10),

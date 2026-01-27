@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/constants.dart';
+import 'package:frontend/constants/constants.dart';
 import 'package:frontend/routes.dart';
 import 'package:frontend/screens/profile/user/user_profile.dart';
 import 'package:frontend/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:frontend/screens/profile/lawyer/lawyer_profile.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,21 +25,17 @@ class _LegalHelpState extends State<LegalHelp> {
     initPref();
   }
 
-  void initPref() async{
+  void initPref() async {
     pref = await SharedPreferences.getInstance();
-    if(pref!.getBool(themeMode) == null){
+    if (pref!.getBool(themeMode) == null) {
       pref!.setBool(themeMode, true);
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
-  void reload(){
+  void reload() {
     print("reloading");
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -46,12 +43,16 @@ class _LegalHelpState extends State<LegalHelp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      themeMode: pref != null ? (pref!.getBool(themeMode)! ? ThemeMode.light : ThemeMode.dark) : ThemeMode.system,
+      themeMode:
+          pref != null
+              ? (pref!.getBool(themeMode)! ? ThemeMode.light : ThemeMode.dark)
+              : ThemeMode.system,
       darkTheme: darkTheme,
       title: projectName,
       routes: {
         ...routes,
         MyRoutes.userProfile: (context) => UserProfile(reload),
+        MyRoutes.lawyerProfile: (context) => LawyerProfile(reload),
       },
       initialRoute: MyRoutes.home,
       color: Theme.of(context).colorScheme.secondary,

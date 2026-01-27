@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:frontend/constants.dart';
+import 'package:frontend/constants/constants.dart';
 import 'package:frontend/models/all_laws_model.dart';
+import 'package:frontend/widgets/bottom_details.dart';
 import 'package:frontend/widgets/laws_related/list_of_section_after_chapter.dart';
 import 'package:frontend/widgets/laws_related/my_search.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
@@ -41,9 +42,11 @@ class _ListOfChaptersState extends State<ListOfChapters> {
 
   @override
   void initState() {
+    super.initState();
     loadData();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -57,6 +60,10 @@ class _ListOfChaptersState extends State<ListOfChapters> {
             padding: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
             itemCount: chaptersTitle.length,
             itemBuilder: (context, idx) {
+              List totalSections =
+                  allLaws
+                      .where((el) => el.chapterTitle == chaptersTitle[idx])
+                      .toList();
               return Padding(
                 padding: EdgeInsets.only(bottom: 10),
                 child: InkWell(
@@ -69,20 +76,14 @@ class _ListOfChaptersState extends State<ListOfChapters> {
                             (context) => ListOfSectionAfterChapter(
                               lawName: widget.lawName,
                               chapterName: chaptersTitle[idx],
-                              sections:
-                                  allLaws
-                                      .where(
-                                        (el) =>
-                                            el.chapterTitle == chaptersTitle[idx],
-                                      )
-                                      .toList(),
+                              sections: totalSections,
+                              chapterNo: chaptersNo[idx],
                             ),
                       ),
                     );
                   },
                   child: MyContainer(
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.fromLTRB(10, 15, 15, 15),
+                    // width: MediaQuery.of(context).size.width,
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       spacing: 10,
@@ -95,16 +96,17 @@ class _ListOfChaptersState extends State<ListOfChapters> {
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 5,
+                            spacing: 10,
                             children: [
-                              MyText(
-                                "Chapter " + chaptersNo[idx],
-                                fontWeight: FontWeight.w700,
-                                fontSize: 15,
-                              ),
                               MyText(
                                 chaptersTitle[idx],
                                 textAlign: TextAlign.start,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              BottomDetails(
+                                leftText: "Chapter ${chaptersNo[idx]}",
+                                rightText:
+                                    "Total sections : ${totalSections.length}",
                               ),
                             ],
                           ),

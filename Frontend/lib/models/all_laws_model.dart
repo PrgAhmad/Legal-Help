@@ -25,13 +25,17 @@ class AllLawsModel {
 
 String capitalize(String text) {
   if (text.isEmpty) return text;
-   String newText = text.trim().replaceAll("  ", " ")
-       .split(" ")
-       .toList()
-       .map((el) => el[0].toUpperCase() + el.substring(1).toLowerCase())
-       .toList()
-       .join(" ");
-   return newText;
+  String newText = text
+      .trim()
+      .replaceAll("  ", " ").toUpperCase()
+      .split(" ")
+      .toList()
+      .map((el) {
+        return el[0] + el.substring(1).toLowerCase();
+      })
+      .toList()
+      .join(" ");
+  return newText;
 }
 
 List allLaws = [];

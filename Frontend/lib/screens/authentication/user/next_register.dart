@@ -62,7 +62,7 @@ class _UserRegisterState extends State<UserNextRegister> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, MyRoutes.userLogin);
+                    Navigator.pushNamed(context, MyRoutes.login);
                   },
                   child: MyText("Already have an account? Login", fontSize: 12),
                 ),

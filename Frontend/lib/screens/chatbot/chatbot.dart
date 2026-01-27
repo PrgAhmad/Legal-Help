@@ -1,8 +1,7 @@
-import 'dart:math';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/constants.dart';
-import 'package:frontend/screens/authentication/widgets/my_input.dart';
+import 'package:frontend/constants/constants.dart';
 import 'package:frontend/screens/chatbot/widgets/chat_drawer.dart';
 import 'package:frontend/screens/chatbot/widgets/chat_window.dart';
 import 'package:frontend/screens/chatbot/widgets/my_chat_input_box.dart';
@@ -20,20 +19,35 @@ class Chatbot extends StatefulWidget {
 class _ChatbotState extends State<Chatbot> {
   TextEditingController chatInputCtrl = TextEditingController();
   ScrollController scrollCtrl = ScrollController();
+  List<Map> conversations = [];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool isVisual = false;
   bool isGenerating = false;
+  bool isEdit = false;
+  int editIndex = 0;
+  bool isGenerated = false;
 
-  int random(){
-    final random = Random();
-    return random.nextInt(10000);
-  }
+  String apiUrl = "/chat/generate?style=simple&type=normal";
 
   Future<String> getAI(String text) async {
+    print("fetching...");
     final res = await http.get(
-      Uri.parse("https://text.pollinations.ai/${SYSTEM_PROMPT}\n\n${text}?seed=${random()}&model=openai"),
+      Uri.parse("${LEGAL_HELP_BACKEND_URL}${apiUrl}&question=${text}"),
     );
-    print("${text}\n${random()}");
-    print(res.body);
+    print("data...");
+    print(res.body.toString());
     return res.body.toString();
+  }
+
+  void setApiUrl(styleIdx, typeIdx) {
+    apiUrl =
+        "/chat/generate?style=${generateStyles[styleIdx]}&type=${generateTypes[typeIdx]}";
+    if (generateTypes[typeIdx] == "interactive") {
+      isVisual = true;
+    } else {
+      isVisual = false;
+    }
+    reload();
   }
 
   void scroll() {
@@ -53,8 +67,73 @@ class _ChatbotState extends State<Chatbot> {
     setState(() {});
   }
 
-  List<Map> conversations = [];
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Map test = {
+    "title": "Inducement of Suicide of Another",
+    "introduction":
+        "Section 120 of the Indian Penal Code deals with individuals who, with a purpose as a means, deliberately encourage another person to commit suicide. It is a serious offence aimed at preventing malicious acts that lead to self‑harm under coercion or undue influence.",
+    "applicable_laws": [
+      {
+        "section_or_article": "Section 120",
+        "act": "Indian Penal Code (IPC)",
+        "summary":
+            "Whoever, as a means or purpose, willfully encourages another to commit suicide shall be punished with imprisonment of up to three years and a fine.",
+      },
+    ],
+    "example":
+        "Sunder knows his sister suffers from depression and repeatedly tells her that suicide is the only way out. She later attempts suicide, ultimately ending her life. Sunder can be prosecuted under Section 120 IPC for inducing her to commit suicide.",
+    "punishment": "Imprisonment for a term of up to three years, and a fine.",
+  };
+
+  void onEdit(bool val) {
+    isEdit = val;
+    reload();
+  }
+
+  void handleChatbotInput() async {
+    if (isGenerating) {
+      isGenerating = false;
+      conversations.removeLast();
+      conversations.removeLast();
+      setState(() {});
+    }
+    if (chatInputCtrl.text.isEmpty) return;
+
+    FocusManager.instance.primaryFocus?.unfocus();
+    isGenerating = true;
+    isGenerated = false;
+
+    if (isEdit) {
+      conversations.replaceRange(editIndex, editIndex + 2, [
+        {"type": "user", "msg": chatInputCtrl.text,"isVisual": isVisual},
+        {"type": "ai", "msg": "loading...", "isVisual": isVisual,},
+      ]);
+    } else {
+      conversations.add({"type": "user", "msg": chatInputCtrl.text,"isVisual": isVisual});
+      conversations.add({
+        "type": "ai",
+        "msg": "loading...",
+        "isVisual": isVisual,
+      });
+    }
+    String text = chatInputCtrl.text;
+    chatInputCtrl.text = "";
+    setState(() {});
+
+    String ai = await getAI(text);
+    if (ai.isNotEmpty) {
+      isGenerating = false;
+      if (isEdit) {
+        conversations.replaceRange(editIndex + 1, editIndex + 2, [
+          {"type": "ai", "msg": ai, "isVisual": isVisual},
+        ]);
+        onEdit(false);
+      } else {
+        conversations.removeLast();
+        conversations.add({"type": "ai", "msg": ai, "isVisual": isVisual});
+      }
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +157,7 @@ class _ChatbotState extends State<Chatbot> {
               isGenerating = false;
               setState(() {});
             },
-            child: Icon(Icons.clear),
+            child: Icon(Icons.delete),
           ),
         ],
       ),
@@ -93,39 +172,19 @@ class _ChatbotState extends State<Chatbot> {
                 : ChatWindow(
                   conversations: conversations,
                   scrollCtrl: scrollCtrl,
+                  chatInputCtrl: chatInputCtrl,
+                  onEdit: onEdit,
+                  editIndex: editIndex,
+                  reload: reload,
+                  isGenerated: isGenerated,
+                  apiUrl: apiUrl,
+                  isVisual: isVisual,
                 ),
             MyChatInputBox(
               controller: chatInputCtrl,
               isGenerating: isGenerating,
-              onTap: () async {
-                if (isGenerating) {
-                  conversations.removeLast();
-                  conversations.removeLast();
-                  isGenerating = false;
-                  setState(() {});
-                }
-                if (chatInputCtrl.text.isEmpty) return;
-
-                FocusManager.instance.primaryFocus?.unfocus();
-                isGenerating = true;
-
-                conversations.add({"type": "user", "msg": chatInputCtrl.text});
-                conversations.add({"type": "ai", "msg": "loading..."});
-
-                String text = chatInputCtrl.text;
-                chatInputCtrl.text = "";
-                setState(() {});
-                // scroll();
-
-                String ai = await getAI(text);
-                if (ai.isNotEmpty) {
-                  isGenerating = false;
-                  conversations.removeLast();
-                  conversations.add({"type": "ai", "msg": ai});
-                  setState(() {});
-                  // scroll();
-                }
-              },
+              setApiUrl: setApiUrl,
+              onTap: handleChatbotInput,
             ),
           ],
         ),

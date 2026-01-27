@@ -42,7 +42,7 @@ class _MyDobInputState extends State<MyDobInput> {
             width: double.infinity,
             height: 50,
             child: Row(
-              spacing: 15,
+              spacing: 10,
               children: [
                 Icon(
                   Icons.date_range_rounded,
