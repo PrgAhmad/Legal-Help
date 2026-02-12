@@ -1,17 +1,7 @@
 import * as cheerio from "cheerio";
 import { getDates } from "../helpers/judgment.helper.js";
 
-const url = "https://indiankanoon.org";
-
-// Pick the right launcher depending on environment
-let launchBrowser;
-if (process.env.VERCEL) {
-  const playwrightLambda = await import("playwright-aws-lambda");
-  launchBrowser = () => playwrightLambda.launchChromium({ headless: true });
-} else {
-  const { chromium } = await import("playwright");
-  launchBrowser = () => chromium.launch({ headless: true });
-}
+const BASE_URL = "https://indiankanoon.org";
 
 export const getJudgment = async ({
   search = "",
@@ -21,29 +11,37 @@ export const getJudgment = async ({
   options = "mostrecent",
 }) => {
   const judgements = [];
-  const browser = await launchBrowser();
-  const web = await browser.newPage();
 
-  let nextPage = `${url}/search/?formInput=${search}&filters=doctypes:${courtName}%20sortby%3A${options}%20fromdate:${fromDate}%20todate:${toDate}`;
-  let i = 0;
+  for (let i = 0; i < 2; i++) {
+    const targetUrl =
+      `${BASE_URL}/search/?formInput=${search}` +
+      `&filters=doctypes:${courtName}%20sortby:${options}` +
+      `%20fromdate:${fromDate}%20todate:${toDate}` +
+      `&pagenum=${i}`;
 
-  while (i < 2) {
-    const targetUrl = nextPage + "&pagenum=" + i;
     console.log("Fetching:", targetUrl);
 
-    await web.goto(targetUrl, { waitUntil: "domcontentloaded" });
-    const data = await web.content();
-    const page = cheerio.load(data);
+    const res = await fetch(targetUrl, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+      },
+    });
 
-    const container = page(".results-list > .result");
-    container.each((i, el) => {
-      const titleWithDate = page(el).find("h4 > a").text();
+    const html = await res.text();
+    const page = cheerio.load(html);
+
+    page(".results-list > .result").each((_, el) => {
+      const anchor = page(el).find("h4 > a");
+
+      const titleWithDate = anchor.text().trim();
       const title = titleWithDate.split(" on ")[0].replaceAll("...", "");
-      const firstParty = title.split(" vs ")[0];
-      const secondParty = title.split(" vs ")[1];
+
+      const [firstParty, secondParty] = title.split(" vs ");
       const date = titleWithDate.split(" on ")[1];
-      const detailedUrl = url + page(el).find("h4 > a").attr("href");
-      const courtName = page(el).find(".hlbottom > .docsource").text();
+
+      const detailedUrl = BASE_URL + anchor.attr("href");
+      const courtName = page(el).find(".docsource").text().trim();
 
       judgements.push({
         title,
@@ -56,10 +54,9 @@ export const getJudgment = async ({
       });
     });
 
-    i++;
-    await new Promise(r => setTimeout(r, 2000)); // polite delay
+    // polite delay
+    await new Promise(r => setTimeout(r, 1500));
   }
 
-  await browser.close();
   return judgements;
 };
