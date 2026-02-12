@@ -1,9 +1,16 @@
 import * as cheerio from "cheerio";
 import { getDates } from "../helpers/judgment.helper.js";
 
-const url = "https://indiankanoon.org";
+let chromium;
+if (process.env.VERCEL) {
+  const playwrightLambda = await import("playwright-aws-lambda");
+  chromium = playwrightLambda;
+} else {
+  const { chromium: localChromium } = await import("playwright");
+  chromium = localChromium;
+}
 
-console.log(getDates());
+const url = "https://indiankanoon.org";
 
 export const getJudgment = async ({
   search = "",
@@ -13,19 +20,20 @@ export const getJudgment = async ({
   options = "mostrecent",
 }) => {
   const judgements = [];
+  const browser = await chromium.launch({ headless: true });
+  const web = await browser.newPage();
   let nextPage = `${url}/search/?formInput=${search}&filters=doctypes:${courtName}%20sortby%3A${options}%20fromdate:${fromDate}%20todate:${toDate}`;
   let i = 0;
   console.log(url);
   console.log(courtName);
 
   while (i < 2) {
-    console.log(nextPage + "&pagenum=" + i);
-    const res = await fetch(nextPage + "&pagenum=" + i);
-    const data = await res.text();
+    // console.log(nextPage + "&pagenum=" + i);
+    await web.goto(nextPage + "&pagenum=" + i, { waitUntil: "domcontentloaded" });    
+    const data = await web.content();
     const page = cheerio.load(data);
-    const container = page(".results-list > .result");
-    console.log(res);
 
+    const container = page(".results-list > .result");
     container.each((i, el) => {
       const titleWithDate = page(el).find("h4 > a").text();
       const title = titleWithDate.split(" on ")[0].replaceAll("...");
@@ -47,5 +55,7 @@ export const getJudgment = async ({
     });
     i = i + 1;
   }
+
+  await browser.close();
   return judgements;
 };
