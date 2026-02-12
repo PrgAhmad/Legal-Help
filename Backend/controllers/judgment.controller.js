@@ -1,16 +1,17 @@
 import * as cheerio from "cheerio";
 import { getDates } from "../helpers/judgment.helper.js";
 
-let chromium;
+const url = "https://indiankanoon.org";
+
+// Pick the right launcher depending on environment
+let launchBrowser;
 if (process.env.VERCEL) {
   const playwrightLambda = await import("playwright-aws-lambda");
-  chromium = playwrightLambda;
+  launchBrowser = () => playwrightLambda.launchChromium({ headless: true });
 } else {
-  const { chromium: localChromium } = await import("playwright");
-  chromium = localChromium;
+  const { chromium } = await import("playwright");
+  launchBrowser = () => chromium.launch({ headless: true });
 }
-
-const url = "https://indiankanoon.org";
 
 export const getJudgment = async ({
   search = "",
@@ -20,23 +21,24 @@ export const getJudgment = async ({
   options = "mostrecent",
 }) => {
   const judgements = [];
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchBrowser();
   const web = await browser.newPage();
+
   let nextPage = `${url}/search/?formInput=${search}&filters=doctypes:${courtName}%20sortby%3A${options}%20fromdate:${fromDate}%20todate:${toDate}`;
   let i = 0;
-  console.log(url);
-  console.log(courtName);
 
   while (i < 2) {
-    // console.log(nextPage + "&pagenum=" + i);
-    await web.goto(nextPage + "&pagenum=" + i, { waitUntil: "domcontentloaded" });    
+    const targetUrl = nextPage + "&pagenum=" + i;
+    console.log("Fetching:", targetUrl);
+
+    await web.goto(targetUrl, { waitUntil: "domcontentloaded" });
     const data = await web.content();
     const page = cheerio.load(data);
 
     const container = page(".results-list > .result");
     container.each((i, el) => {
       const titleWithDate = page(el).find("h4 > a").text();
-      const title = titleWithDate.split(" on ")[0].replaceAll("...");
+      const title = titleWithDate.split(" on ")[0].replaceAll("...", "");
       const firstParty = title.split(" vs ")[0];
       const secondParty = title.split(" vs ")[1];
       const date = titleWithDate.split(" on ")[1];
@@ -53,7 +55,9 @@ export const getJudgment = async ({
         titleWithDate,
       });
     });
-    i = i + 1;
+
+    i++;
+    await new Promise(r => setTimeout(r, 2000)); // polite delay
   }
 
   await browser.close();
