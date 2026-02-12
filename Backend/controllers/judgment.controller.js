@@ -29,6 +29,8 @@ export const getJudgment = async ({
     });
 
     const html = await res.text();
+    console.log(res);
+
     const page = cheerio.load(html);
 
     page(".results-list > .result").each((_, el) => {
@@ -54,8 +56,7 @@ export const getJudgment = async ({
       });
     });
 
-    // polite delay
-    await new Promise(r => setTimeout(r, 1500));
+    await new Promise((r) => setTimeout(r, 1500));
   }
 
   return judgements;
