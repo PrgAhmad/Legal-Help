@@ -3,22 +3,12 @@ import { getJudgment } from "../controllers/judgment.controller.js";
 
 const router = Router();
 
-router.get("/all_courts", async (req, res) => {
-  const { courtName, year, options, search } = req.query;
+router.get("/get_by_court", async (req, res) => {
+  const { court_name, from_date, to_date, options, search } = req.query;
   const judgments = await getJudgment({
-    courtName,
-    year,
-    options,
-    search,
-  });
-  res.json(judgments);
-});
-
-router.get("/single_court", async (req, res) => {
-  const { courtName, year, options, search } = req.query;
-  const judgments = await getJudgment({
-    courtName,
-    year,
+    courtName: court_name,
+    fromDate: from_date,
+    toDate: to_date,
     options,
     search,
   });
