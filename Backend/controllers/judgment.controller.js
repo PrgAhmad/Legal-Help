@@ -12,10 +12,10 @@ export const getJudgment = async ({
 }) => {
   const judgements = [];
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 5; i++) {
     const targetUrl =
       `${BASE_URL}/search/?formInput=${search}` +
-      `&filters=doctypes:${courtName}%20sortby:${options}` +
+      `&filters=doctypes:${courtName == "all_courts" ? "supremecourt,highcourts" : courtName}%20sortby:${options}` +
       `%20fromdate:${fromDate}%20todate:${toDate}` +
       `&pagenum=${i}`;
 
@@ -55,8 +55,6 @@ export const getJudgment = async ({
         titleWithDate,
       });
     });
-
-    await new Promise((r) => setTimeout(r, 1500));
   }
 
   return judgements;
