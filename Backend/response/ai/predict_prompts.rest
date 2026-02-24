@@ -1,0 +1,6 @@
+# AI endpoint to predict next legal prompts
+
+# Example:
+GET http://localhost:3000/ai/predict_prompts?prompt=What%20is%20the%20penalty%20for
+
+# Response will be JSON with an array of five suggested prompts.

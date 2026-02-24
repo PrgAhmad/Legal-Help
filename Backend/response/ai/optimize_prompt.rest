@@ -1,0 +1,6 @@
+# AI endpoint to optimize a prompt
+
+# Example:
+GET http://localhost:3000/ai/optimize_prompt?prompt=Explain%20IPC%20section%2021
+
+# The server will return the refined prompt as plain text.
