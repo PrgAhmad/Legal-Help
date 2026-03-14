@@ -1,0 +1,32 @@
+POST http://localhost:3000/lawyer/register
+Content-Type: application/json
+
+{
+    "fullName":"Mrs. Munna",
+    "emailId":"test1w243@gmail.com",
+    "password":"test@112",
+    "mobileNumber":"98765232w32",
+    "dateOfBirth":"2000-01-01",
+    "gender":"Male",
+    "address":{
+        "officeAddress":"Bhartiya Kamla Nagar Antop Hill Wadala East",
+        "pincode":"400037",
+        "city":"Mumbai",
+        "state":"Maharashtra",
+        "practiceCourt":"Bombay Court"
+    },
+    "professional":{
+        "barCouncilId":"23/2444/FG34",
+        "fees":5040,
+        "specialization":"Criminal",
+        "expertise":[
+            "FIR","Bail and Court Hearing"
+        ]
+    },
+    "introduction":{
+        "profilePhoto":"http:",
+        "yearOfExperience":4,
+        "shortIntro":"this is short intro",
+        "detailedIntro":"this is long intro"
+    }
+}

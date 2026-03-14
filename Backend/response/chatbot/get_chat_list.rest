@@ -1,0 +1,1 @@
+GET http://localhost:3000/chat/get_chat_list?userId=6934f5e1b6ad28e969e7bca7

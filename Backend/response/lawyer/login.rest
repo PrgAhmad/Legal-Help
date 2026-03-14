@@ -1,0 +1,7 @@
+POST http://localhost:3000/lawyer/login 
+Content-Type: application/json
+
+{
+    "emailId":"test123@gmail.com",
+    "password":"tesst@112"
+}

@@ -1,0 +1,1 @@
+GET http://localhost:3000/judgment/get_detailed_judgment?url=https://indiankanoon.org/doc/64157726/

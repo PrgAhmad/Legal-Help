@@ -3,7 +3,7 @@ import { getDates } from "../helpers/judgment.helper.js";
 
 const BASE_URL = "https://indiankanoon.org";
 
-export const getJudgment = async ({
+export const getJudgments = async ({
   search = "",
   courtName,
   fromDate = getDates().fromDate,
@@ -69,3 +69,12 @@ export const getJudgment = async ({
     judgements,
   };
 };
+
+
+export const getDetailedJudgment = async({url}) => {
+  const res = await fetch(url);
+  const html = await res.text();
+  const page = cheerio.load(html);
+  const container = page(".judgments");
+  return container.text().trim();
+}

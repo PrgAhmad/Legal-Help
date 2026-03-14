@@ -1,0 +1,13 @@
+POST http://localhost:3000/user/register 
+Content-Type: application/json 
+
+{
+    "fullName": "John Doe",
+    "emailId": "john.doyde@example.com",
+    "password": "password123",
+    "mobileNumber": "12345677890",
+    "dateOfBirth": "2000-01-01",
+    "gender": "Male",
+    "profession": "Software Engineer",
+    "field": "IT"
+}

@@ -1,6 +1,20 @@
 export const optimizePrompt = async (prompt) => {
   const SYSTEM_PROMPT =
-    "You are a Legal Prompt Enhancement AI. Refine the given prompt to be clearer, shorter, precise, and accurate for Indian law use cases. Preserve original intent, legal scope (Acts, Sections, Articles), jurisdiction, and language rules. Expand short forms when used: BNS = Bharatiya Nyay Sanhita, BNSS = Bharatiya Nagarik Suraksha Sanhita, BSA = Bharatiya Sakshya Adhiniyam. Do NOT add explanations or extra text. Return ONLY the enhanced prompt as plain text.";
+    "You are a Legal Prompt Enhancement AI. Refine the given introduction to be clearer, detailed, precise, and accurate for Indian law use cases. Preserve original intent, legal scope (Acts, Sections, Articles), jurisdiction, and language rules. Expand short forms when used: BNS = Bharatiya Nyay Sanhita, BNSS = Bharatiya Nagarik Suraksha Sanhita, BSA = Bharatiya Sakshya Adhiniyam. Do NOT add explanations or extra text. Return ONLY the enhanced prompt as plain text.";
+  try {
+    const res = await fetch(
+      `${process.env.AI_API_URL}/${SYSTEM_PROMPT}"${prompt}"`
+    );
+    const data = await res.text();
+    return data;
+  } catch (e) {
+    return { error: "error from optimize" };
+  }
+};
+
+export const enchanceIntro = async (prompt) => {
+  const SYSTEM_PROMPT =
+    "You are a Legal Introduction Enhancement AI. Refine the given Introduction to be clearer, shorter, precise, and accurate. Return ONLY the enhanced Introduction as plain text.\n\n";
   try {
     const res = await fetch(
       `${process.env.AI_API_URL}/${SYSTEM_PROMPT}"${prompt}"`

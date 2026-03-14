@@ -1,7 +1,14 @@
 # Chatbot generate response endpoint
-
 # Basic usage with required query parameters:
-GET http://localhost:3000/chat/generate?question=How%20can%20I%20file%20a%20FIR&style=0&type=0&isGemini=false
+POST http://localhost:3000/chat/generate?userId=6934f5e1b6ad28e969e7bca7 
+Content-Type: application/json 
+
+{
+    "question": "What is section 120 of Bhartiya Nyay Sanhita",
+    "style":"simple",
+    "type": "normal",
+    "chatId": "69b53244bcbf565551d03dd1"
+}
 
 # Optional style and type indices correspond to ANSWER_STYLE and ANSWER_TYPE arrays defined in chatbot_style.js
 # You can omit isGemini or set to true to attempt Gemini path (currently stubbed).
