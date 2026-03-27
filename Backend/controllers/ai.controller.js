@@ -3,7 +3,7 @@ export const optimizePrompt = async (prompt) => {
     "You are a Legal Prompt Enhancement AI. Refine the given introduction to be clearer, detailed, precise, and accurate for Indian law use cases. Preserve original intent, legal scope (Acts, Sections, Articles), jurisdiction, and language rules. Expand short forms when used: BNS = Bharatiya Nyay Sanhita, BNSS = Bharatiya Nagarik Suraksha Sanhita, BSA = Bharatiya Sakshya Adhiniyam. Do NOT add explanations or extra text. Return ONLY the enhanced prompt as plain text.";
   try {
     const res = await fetch(
-      `${process.env.AI_API_URL}/${SYSTEM_PROMPT}"${prompt}"`
+      `${process.env.AI_API_URL}/${SYSTEM_PROMPT}"${prompt}"`,
     );
     const data = await res.text();
     return data;
@@ -14,10 +14,10 @@ export const optimizePrompt = async (prompt) => {
 
 export const enchanceIntro = async (prompt) => {
   const SYSTEM_PROMPT =
-    "You are a Legal Introduction Enhancement AI. Refine the given Introduction to be clearer, shorter, precise, and accurate. Return ONLY the enhanced Introduction as plain text.\n\n";
+    "You are a Legal Introduction Enhancement AI. Refine the given Introduction to be clearer, shorter, precise, and accurate make it upto 300 to 400 chars long. Return ONLY the enhanced Introduction as plain text.\n\n";
   try {
     const res = await fetch(
-      `${process.env.AI_API_URL}/${SYSTEM_PROMPT}"${prompt}"`
+      `${process.env.AI_API_URL}/${SYSTEM_PROMPT}"${prompt}"`,
     );
     const data = await res.text();
     return data;
@@ -44,7 +44,7 @@ Rules:
 `;
   try {
     const res = await fetch(
-      `${process.env.AI_API_URL}/${SYSTEM_PROMPT}\nHere is "${prompt}"`
+      `${process.env.AI_API_URL}/${SYSTEM_PROMPT}\nHere is "${prompt}"`,
     );
     const data = await res.text();
     return data;

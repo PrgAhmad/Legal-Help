@@ -5,6 +5,7 @@ import {
 } from "../helpers/chatbot.helper.js";
 import {
   createChatbot,
+  deleteChatbot,
   getChatbot,
   getChatbotById,
   updateChatbot,
@@ -76,10 +77,20 @@ export const generateResponse = async (
 };
 
 export const getChatsList = async (userId) => {
-  let error = "Error while fetching chats";
+  let error = { error: "Error while fetching chats" };
   try {
     const data = await getChatbot(userId);
     return data;
+  } catch (err) {
+    return error;
+  }
+};
+
+export const deleteChat = async (chatId) => {
+  let error = { error: "Error while deleting chat" };
+  try {
+    const isDeleted = await deleteChatbot(chatId);
+    return isDeleted;
   } catch (err) {
     return error;
   }

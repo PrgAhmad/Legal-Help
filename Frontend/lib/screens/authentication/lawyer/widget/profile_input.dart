@@ -21,14 +21,20 @@ class _MyProfileInputState extends State<MyProfileInput> {
             child: MyText("Profile Photo", textAlign: TextAlign.start),
           ),
         ),
-        Container(
-          width: 90,
-          height: 90,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            shape: BoxShape.circle,
+        GestureDetector(
+          onTap: () {},
+          child: Container(
+            width: 90,
+            height: 90,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.add_a_photo_rounded,
+              color: Theme.of(context).colorScheme.tertiaryFixed,
+            ),
           ),
-          child: Icon(Icons.add_a_photo_rounded, color: Theme.of(context).colorScheme.tertiaryFixed,),
         ),
       ],
     );

@@ -41,32 +41,123 @@ response/              # REST client request templates
 
 ## 📡 API Endpoints
 
-All endpoints are `GET` requests. Example queries are provided in the
-`response/` folder – open those `.rest` files in VS Code and run them to test.
+> Base API prefix:
+>
+> - `/ai` for AI utilities
+> - `/chat` for chatbot history and generation
+> - `/judgment` for case search and details
+> - `/user` for end user auth
+> - `/lawyer` for lawyer auth and data
 
-### 1. AI services
+### 1. User Auth
 
-- `/ai/optimize_prompt?prompt=<text>`
-  - Returns a refined version of your prompt for Indian law queries.
+- `POST /user/register`
+  - Body (JSON):
+    ```json
+    {
+      "fullName": "string",
+      "emailId": "string",
+      "password": "string",
+      "mobileNumber": "string",
+      "dateOfBirth": "dd-mm-yyyy",
+      "gender": "string",
+      "profession": "string",
+      "field": "string"
+    }
+    ```
+  - Response:
+    - Success: created user object
+    - Error: `{ "error": "..." }` or `{ "error": "User already exist" }`
 
-- `/ai/predict_prompts?prompt=<text>`
-  - Returns a JSON object with 5 predicted prompt continuations.
+- `POST /user/login`
+  - Body (JSON):
+    ```json
+    {
+      "emailId": "string",
+      "password": "string"
+    }
+    ```
+  - Response:
+    - Success: user object
+    - Invalid password: `{ "message": "Password is not match" }`
+    - No user: `{ "message": "User is not exist" }`
 
-### 2. Chat
+### 2. Lawyer Auth & Data
 
-- `/chat/generate?question=<text>&style=<index>&type=<index>&isGemini=<bool>`
-  - Builds a combined prompt using `chatbot_style.js` values, optionally
-    forwards to Gemini (currently commented out), and returns model output.
+- `POST /lawyer/register`
+  - Body (JSON): similar to `/user/register`.
+  - Response:
+    - Success: created lawyer object
+    - Existing lawyer: `{ "message": "lawyer is already exist" }`
 
-### 3. Judgments
+- `POST /lawyer/login`
+  - Body (JSON): same as user login.
+  - Response:
+    - Success: lawyer object
+    - Invalid password: `{ "message": "Password is not match" }`
+    - No lawyer: `{ "message": "lawyer is not exist" }`
 
-- `/judgment/get_by_court?court_name=<court>&from_date=<d-m-Y>&to_date=<d-m-Y>&options=<sort>&search=<term>`
-  - Scrapes IndianKanoon and returns a list of judgement metadata.
-  - `court_name` may be `all_courts` or the specific court identifier.
-  - `from_date`/`to_date` default to the last two months; `options` defaults
-    to `mostrecent`.
+- `GET /lawyer/list`
+  - Response: array of lawyer records or `{ "error": "Error while fetching lawyers" }`
 
-> **Note:** the scraper loops over 5 pages and pulls results from the HTML.
+- `POST /lawyer/upload`
+  - Form Data: `image` (file)
+  - Response: `{ "image": "<uploaded-file-path>" }`
+
+### 3. Chatbot
+
+- `POST /chat/generate?userId=<string>`
+  - Body (JSON):
+    ```json
+    {
+      "chatId": "string|null",
+      "question": "string",
+      "style": "string",
+      "type": "string" // visual or text
+    }
+    ```
+  - Behavior:
+    - Builds prompt via `chatbot.helper.queryBuilder`
+    - Sends request to `AI_API_URL` with random seed
+    - Stores or updates chat history in DB via service layer
+  - Response: saved chat object or error object
+
+- `GET /chat/get_chat_list?userId=<string>`
+  - Response: list of chatbot entries for user
+
+- `DELETE /chat/delete?chatId=<string>`
+  - Response: deletion result object
+
+### 4. AI utilities
+
+- `GET /ai/optimize_prompt?prompt=<text>`
+  - Response: raw optimized text from AI API
+
+- `GET /ai/predict_prompts?prompt=<text>`
+  - Response: raw predicted prompts text (JSON string expected)
+
+- `GET /ai/enhance_intro?intro=<text>`
+  - Response: raw enhanced intro text
+
+### 5. Judgment scraping
+
+- `GET /judgment/get_by_court?court_name=<court>&from_date=<d-m-Y>&to_date=<d-m-Y>&options=<sort>&search=<term>&page_idx=<number>`
+  - Query details:
+    - `court_name`: single value (e.g. `supremecourt`, `highcourts`, `all_courts`)
+    - `from_date`, `to_date`: defaults to recent range from helper
+    - `options`: sort setting, default `mostrecent`
+    - `search`: case text filter
+    - `page_idx`: paging index starting at 0
+  - Response:
+    ```json
+    {
+      "totalDoc": <number>,
+      "judgements": [ ... ]
+    }
+    ```
+
+- `GET /judgment/get_detailed_judgment?url=<full-indiankanoon-url>`
+  - Response: text content of scraped judgment body
 
 ## 🧪 Testing
 
