@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/chatbot/chatbot.dart';
+import 'package:frontend/service/chatbot_service.dart';
 import 'package:frontend/widgets/my_text.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,19 +14,22 @@ class ChatDrawer extends StatefulWidget {
 }
 
 class _ChatDrawerState extends State<ChatDrawer> {
+  ChatbotService chatbotService = ChatbotService();
   @override
-  List<String> chatHistoryTitles = [
-    "IPC Section 420 – Cheating Case",
-    "BNS Explained in Simple Language",
-    "FIR Filing Procedure in India",
-    "Rights After Arrest",
-    "Cyber Crime Complaint Process",
-    "Domestic Violence Law (DV Act)",
-    "Bail Rules in Criminal Cases",
-    "Consumer Protection Act Query",
-    "Article 21 – Right to Life",
-    "Property Dispute Legal Advice",
-  ];
+  List chatHistory = [];
+
+  @override
+  void initState() {
+    super.initState();
+    initChatTitles();
+  }
+
+  void initChatTitles() async {
+    chatHistory = await chatbotService.getChatbotChatList();
+    chatHistory = chatHistory.reversed.toList();
+    print(chatHistory);
+    setState(() {});
+  }
 
   Widget build(BuildContext context) {
     return Drawer(
@@ -61,25 +68,49 @@ class _ChatDrawerState extends State<ChatDrawer> {
                   ),
                 ),
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: chatHistoryTitles.length,
-                  itemBuilder: (context, idx) {
-                    return InkWell(
-                      onTap: (){},
-                      child: Container(
-                          height: 55,
-                          padding: EdgeInsets.only(left: 5),
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                            border: Border(bottom: BorderSide(color: Theme.of(context).colorScheme.outline, width: 0.5))
+              chatHistory.isEmpty
+                  ? Padding(
+                    padding: const EdgeInsets.only(top: 150),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                  : Expanded(
+                    child: ListView.builder(
+                      itemCount: chatHistory.length,
+                      itemBuilder: (context, idx) {
+                        return InkWell(
+                          onTap: () {
+                            String chatId = chatHistory[idx]["_id"];
+                            chatbotService.saveChatId(chatId);
+                            List chats = jsonDecode(chatHistory[idx]["content"]);
+                            print(chats);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Chatbot(chats: chats,),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 55,
+                            padding: EdgeInsets.only(left: 5),
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  width: 0.5,
+                                ),
+                              ),
+                            ),
+                            child: MyText(
+                              chatHistory[idx]["title"],
+                              textAlign: TextAlign.start,
+                            ),
                           ),
-                          child: MyText(chatHistoryTitles[idx])
-                      ),
-                    );
-                  },
-                ),
-              ),
+                        );
+                      },
+                    ),
+                  ),
             ],
           ),
         ),

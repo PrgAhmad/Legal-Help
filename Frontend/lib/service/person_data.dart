@@ -1,24 +1,39 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String userData = "userData";
-SharedPreferences? pref;
+class PersonData{
+  String _personData = "personData";
+  SharedPreferences? _pref;
+  String _isLawyerState = "isLawyerState";
 
-void saveUserData(data)async{
-  pref = await SharedPreferences.getInstance();
-  pref!.setString(userData, jsonEncode(data));
-}
-
-Future<Map?> getUserData()async{
-  pref = await SharedPreferences.getInstance();
-  String data = pref!.getString(userData)!;
-  if(data.isEmpty){
-    return null;
+  void setIsLawyer(boolean)async{
+    _pref = await SharedPreferences.getInstance();
+    await _pref!.setBool(_isLawyerState, boolean);
   }
-  return jsonDecode(data);
-}
 
-void removeUserData()async{
-  pref = await SharedPreferences.getInstance();
-  pref!.setString(userData, "");
+  Future<bool> getIsLawyer()async{
+    _pref = await SharedPreferences.getInstance();
+    bool isLawyer = await _pref!.getBool(_isLawyerState) ?? false;
+    return isLawyer;
+  }
+
+  void savePersonData(data)async{
+    _pref = await SharedPreferences.getInstance();
+    await _pref!.setString(_personData, jsonEncode(data));
+  }
+
+  Future<Map?> getPersonData()async{
+    _pref = await SharedPreferences.getInstance();
+    String data = await _pref!.getString(_personData) ?? "";
+    if(data.isEmpty){
+      return null;
+    }
+    return jsonDecode(data);
+  }
+
+  void removePersonData() async{
+    _pref = await SharedPreferences.getInstance();
+    await _pref!.setString(_personData, "");
+  }
+
 }

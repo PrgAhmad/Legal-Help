@@ -3,6 +3,8 @@ import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
 
 Widget LawyerHeader(BuildContext context, {required Map lawyer}) {
+  Map professional = lawyer["professional"];
+  Map address = lawyer["address"];
   return MyContainer(
     width: MediaQuery.of(context).size.width,
     padding: EdgeInsets.all(16),
@@ -24,7 +26,10 @@ Widget LawyerHeader(BuildContext context, {required Map lawyer}) {
               ),
             ],
           ),
-          child: Image.asset('assets/images/lawyers.png', fit: BoxFit.cover),
+          child:
+              lawyer["introduction"]["profilePhoto"].toString().isNotEmpty
+                  ? Image.network(lawyer["introduction"]["profilePhoto"], fit: BoxFit.cover,)
+                  : Image.asset('assets/images/lawyers.png', fit: BoxFit.cover),
         ),
         Expanded(
           child: Column(
@@ -32,7 +37,7 @@ Widget LawyerHeader(BuildContext context, {required Map lawyer}) {
             spacing: 8,
             children: [
               MyText(
-                lawyer['name'] ?? '',
+                lawyer['fullName'] ?? '',
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 textAlign: TextAlign.left,
@@ -43,14 +48,18 @@ Widget LawyerHeader(BuildContext context, {required Map lawyer}) {
                 borderRadius: BorderRadius.circular(7),
                 border: Border.all(color: Colors.blue, width: 0.5),
                 child: MyText(
-                  lawyer['type'] ?? '',
+                  professional["specialization"] ?? '',
                   fontSize: 11,
                   color: Colors.blue,
                   textAlign: TextAlign.left,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              MyText(lawyer["court"], fontSize: 12, fontWeight: FontWeight.w600,),
+              MyText(
+                address["practiceCourt"],
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
             ],
           ),
         ),

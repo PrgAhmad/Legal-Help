@@ -15,11 +15,16 @@ class AppSettingsSection extends StatefulWidget {
 class _AppSettingsSectionState extends State<AppSettingsSection> {
   bool isLight = true;
   SharedPreferences? pref;
+  List<bool> isSelected = [true,false];
 
   void initSharedPref() async{
     pref = await SharedPreferences.getInstance();
-    print("init");
     isLight = pref!.getBool(themeMode)!;
+    if(isLight){
+      isSelected = [true,false];
+    }else{
+      isSelected = [false,true];
+    }
     setState(() {
 
     });
@@ -39,13 +44,8 @@ class _AppSettingsSectionState extends State<AppSettingsSection> {
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 12,
+        // spacing: 12,
         children: [
-          ProfileMenuItem(
-            icon: Icons.notifications,
-            title: "Notifications",
-            onTap: () {},
-          ),
           ProfileMenuItem(
             icon: Icons.language,
             title: "Language",
@@ -55,18 +55,33 @@ class _AppSettingsSectionState extends State<AppSettingsSection> {
           ProfileMenuItem(
             icon: Icons.light_mode,
             title: "Theme",
-            trailing: MyText(isLight ? "Light" : "Dark", color: Colors.grey),
-            onTap: () {
-              isLight = !isLight;
-              widget.reload();
-              setState(() {
-                if(pref != null){
-                  pref!.setBool(themeMode, isLight);
-                  print(pref!.getBool(themeMode));
-                }
-              });
-              // widget.setState();
-            },
+            trailing: ToggleButtons(
+              isSelected: isSelected,
+              color: Theme.of(context).colorScheme.scrim,
+              borderColor: Theme.of(context).colorScheme.outline,
+              borderRadius: BorderRadius.circular(10),
+              onPressed: (int idx) {
+                widget.reload();
+                setState(() {
+                    if(pref != null){
+                      if (0 == idx) {
+                        isSelected[0] = true;
+                        isSelected[1] = false;
+                        pref!.setBool(themeMode, true);
+                      } else {
+                        isSelected[1] = true;
+                        isSelected[0] = false;
+                        pref!.setBool(themeMode, false);
+                      }
+                    }
+                });
+              },
+              children:[
+                Icon(Icons.light_mode_rounded),
+                Icon(Icons.dark_mode_rounded),
+              ],
+            ),
+            onTap: (){},
           ),
         ],
       ),

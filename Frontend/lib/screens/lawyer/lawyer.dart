@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/constants/constants.dart';
-import 'package:frontend/constants/lawyers.dart';
-import 'package:frontend/routes.dart';
 import 'package:frontend/screens/lawyer/lawyer_detail.dart';
+import 'package:frontend/service/lawyer_service.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
 import 'package:frontend/widgets/my_bottom_navigation_bar.dart';
 import 'package:frontend/widgets/my_container.dart';
@@ -16,13 +14,43 @@ class Lawyer extends StatefulWidget {
 }
 
 class _LawyerState extends State<Lawyer> {
+  LawyerService lawyerService = LawyerService();
+  List lawyers = [];
+  @override
+  void initState() {
+    super.initState();
+    initLawyersList();
+  }
+
+  void initLawyersList() async {
+    print("init lawyer");
+    lawyers = await lawyerService.getLawyersList();
+    print(lawyers);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(context, title: "Lawyers"),
+      appBar: MyAppBar(
+        context,
+        title: "Lawyers",
+        titleSpacing: 15,
+        fontSize: 18,
+      ),
       body: Padding(
         padding: EdgeInsets.all(10),
-        child: Column(children: [Row(children: []), buildGrid()]),
+        child: Column(
+          children: [
+            Row(children: []),
+            lawyers.isEmpty
+                ? Padding(
+                  padding: const EdgeInsets.only(top: 200),
+                  child: Center(child: CircularProgressIndicator()),
+                )
+                : buildGrid(),
+          ],
+        ),
       ),
       bottomNavigationBar: MyBottomNavigationBar(),
     );
@@ -40,13 +68,11 @@ class _LawyerState extends State<Lawyer> {
         itemCount: lawyers.length,
         itemBuilder: (context, idx) {
           return GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => LawyerDetail(
-                    lawyer: lawyers[idx],
-                  ),
+                  builder: (context) => LawyerDetail(lawyer: lawyers[idx]),
                 ),
               );
             },
@@ -58,26 +84,37 @@ class _LawyerState extends State<Lawyer> {
                 children: [
                   Container(
                     height: 75,
+                    width: 75,
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primary,
                       shape: BoxShape.circle,
                     ),
-                    child: Image(image: AssetImage("assets/images/lawyers.png")),
+                    child: Image(
+                      image:
+                          lawyers[idx]["introduction"]["profilePhoto"]
+                                  .toString()
+                                  .isNotEmpty
+                              ? NetworkImage(
+                                lawyers[idx]["introduction"]["profilePhoto"],
+                              )
+                              : AssetImage("assets/images/lawyers.png"),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  MyText(lawyers[idx]["name"], fontWeight: FontWeight.w700),
+                  MyText(lawyers[idx]["fullName"], fontWeight: FontWeight.w700),
                   MyContainer(
                     padding: EdgeInsets.symmetric(vertical: 3, horizontal: 7),
                     borderRadius: BorderRadius.circular(7),
                     border: Border.all(color: Colors.blue, width: 0.5),
                     child: MyText(
-                      lawyers[idx]["type"],
+                      "${lawyers[idx]["professional"]["specialization"]} Lawyer",
                       fontSize: 9.5,
                       color: Colors.blue,
                     ),
                   ),
                   MyText(
-                    lawyers[idx]["court"],
+                    lawyers[idx]["address"]["practiceCourt"],
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
                   ),
@@ -87,213 +124,9 @@ class _LawyerState extends State<Lawyer> {
                     children: [
                       Icon(Icons.location_city_rounded, size: 20),
                       MyText(
-                        lawyers[idx]["district"],
+                        lawyers[idx]["address"]["city"],
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
-                      ),
-                    ],
-                  ),
-                  // GestureDetector(
-                  //   onTap: (){
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => LawyerDetail(
-                  //           lawyer: lawyers[idx],
-                  //         ),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: MyContainer(
-                  //     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  //     borderRadius: BorderRadius.circular(8),
-                  //     color: Theme.of(context).colorScheme.primary,
-                  //     width: double.infinity,
-                  //     child: Row(
-                  //       spacing: 5,
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       children: [
-                  //         MyText(
-                  //           "View Profile",
-                  //           fontSize: 11,
-                  //           color: Theme.of(context).colorScheme.tertiaryFixed,
-                  //           fontWeight: FontWeight.w700,
-                  //         ),
-                  //         Icon(
-                  //           Icons.arrow_forward,
-                  //           size: 16,
-                  //           color: Theme.of(context).colorScheme.tertiaryFixed,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget buildList() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, idx) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: 10),
-            child: MyContainer(
-              margin: EdgeInsets.only(bottom: 10),
-              child: Row(
-                spacing: 10,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  MyContainer(
-                    width: 4,
-                    color: Theme.of(context).colorScheme.primary,
-                    height: 85,
-                  ),
-                  Column(
-                    spacing: 10,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        spacing: 15,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 75,
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Image(
-                              image: AssetImage("assets/images/lawyers.png"),
-                            ),
-                          ),
-                          Column(
-                            spacing: 5,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              MyText(
-                                "Shahid Ansari",
-                                fontWeight: FontWeight.w700,
-                              ),
-                              Row(
-                                spacing: 10,
-                                children: [
-                                  MyText("Corporate Lawyer", fontSize: 11),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    spacing: 10,
-                                    children: [
-                                      MyContainer(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 3,
-                                          horizontal: 5,
-                                        ),
-                                        border: Border.all(
-                                          color: Colors.blue,
-                                          width: 0.5,
-                                        ),
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: MyText(
-                                          "3 yrs",
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.blue,
-                                        ),
-                                      ),
-                                      MyContainer(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 3,
-                                          horizontal: 5,
-                                        ),
-                                        border: Border.all(
-                                          color: Colors.green,
-                                          width: 0.5,
-                                        ),
-                                        borderRadius: BorderRadius.circular(5),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          spacing: 3,
-                                          children: [
-                                            MyText(
-                                              "4.5",
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.green,
-                                            ),
-                                            Icon(
-                                              Icons.star_rate_rounded,
-                                              size: 14,
-                                              color: Colors.green,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(),
-                              Row(
-                                spacing: 10,
-                                children: [
-                                  MyContainer(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 3,
-                                      horizontal: 5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5),
-                                    child: MyText(
-                                      "Supreme Court",
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Row(
-                            spacing: 10,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.location_city_rounded, size: 20),
-                              MyText(
-                                "Mumbai",
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ],
-                          ),
-                          MyContainer(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 3,
-                              horizontal: 5,
-                            ),
-                            borderRadius: BorderRadius.circular(5),
-                            color: Theme.of(context).colorScheme.primary,
-                            child: MyText(
-                              "view profile",
-                              fontSize: 11,
-                              color:
-                                  Theme.of(context).colorScheme.tertiaryFixed,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),

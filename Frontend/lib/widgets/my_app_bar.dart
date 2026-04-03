@@ -7,9 +7,11 @@ PreferredSizeWidget MyAppBar(
   double? fontSize,
   List<Widget>? actions,
   Widget? leading,
+      double? titleSpacing,
 }) {
   return AppBar(
     leading: leading,
+    titleSpacing: titleSpacing ?? 0.0,
     backgroundColor: Theme.of(context).colorScheme.secondary,
     shadowColor: Theme.of(context).colorScheme.shadow,
     surfaceTintColor: Colors.transparent,
@@ -20,7 +22,7 @@ PreferredSizeWidget MyAppBar(
     ),
     title: MyText(
       title!,
-      fontSize: fontSize ?? 18,
+      fontSize: fontSize ?? 16,
       fontWeight: FontWeight.w700,
       color: Theme.of(context).colorScheme.tertiary,
       overflow: TextOverflow.ellipsis,

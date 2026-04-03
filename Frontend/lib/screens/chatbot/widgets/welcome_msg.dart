@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:frontend/service/person_data.dart';
 import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
 
@@ -10,6 +11,22 @@ class WelcomeMsg extends StatefulWidget {
 }
 
 class _WelcomeMsgState extends State<WelcomeMsg> {
+  String fullName = "";
+  PersonData personData = PersonData();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initName();
+  }
+
+  void initName()async{
+    final data = await personData.getPersonData();
+    fullName = data != null ? data["fullName"] : "";
+    setState(() {
+
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -18,6 +35,9 @@ class _WelcomeMsgState extends State<WelcomeMsg> {
           spacing: 12,
           mainAxisSize: MainAxisSize.min,
           children: [
+            MyText("Hello, $fullName",
+              fontSize: 19,
+              fontWeight: FontWeight.w600,),
             MyText(
               "How can I help you today?",
               fontSize: 21,

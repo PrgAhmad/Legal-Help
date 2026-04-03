@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/models/indian_constituiton_model.dart';
+import 'package:frontend/models/constitution_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget MySearch(BuildContext context, Function setState, List originalList, TextEditingController searchSection) {

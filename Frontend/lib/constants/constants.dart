@@ -1,5 +1,6 @@
 
 const LEGAL_HELP_BACKEND_URL = "https://legal-help-backend.vercel.app";
+const LEGAL_HELP_BACKEND_URL2 = "https://legal-help-8mzi.onrender.com";
 
 const projectName = "Legal Help";
 const themeMode = "themeMode";
@@ -13,10 +14,10 @@ List generateStyles = [
   "professional",
 ];
 
-List generateTypes = ["normal", "interactive"];
+List generateTypes = ["normal", "visual"];
 
 Map indianConstitutions = {
-  "name": "Constitution of India",
+  "name": "Indian Constitution",
   "jsonPath": "assets/laws_in_json/indian_constitution.json",
   "description":
       "The supreme law of India that lays down the framework defining political principles, structure of government, fundamental rights, duties, and directive principles for citizens and institutions.",

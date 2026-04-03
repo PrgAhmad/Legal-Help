@@ -1,10 +1,10 @@
-class IndianConstitutionModel {
+class ConstitutionModel {
   String? partNo;
   String? partTitle;
-  String? articleNo;
-  String? articleTitle;
-  String? articleContent;
-  IndianConstitutionModel({
+  String articleNo;
+  String articleTitle;
+  String articleContent;
+  ConstitutionModel({
     this.partNo,
     this.partTitle,
     required this.articleNo,
@@ -12,8 +12,8 @@ class IndianConstitutionModel {
     required this.articleContent,
   });
 
-  factory IndianConstitutionModel.fromJson(Map<String, dynamic> map) {
-    return IndianConstitutionModel(
+  factory ConstitutionModel.fromJson(Map<String, dynamic> map) {
+    return ConstitutionModel(
       partNo: map["part"].toString() ?? "",
       partTitle: capitalize(map["part_title"].toString()) ?? "",
       articleNo: map["article"].toString(),

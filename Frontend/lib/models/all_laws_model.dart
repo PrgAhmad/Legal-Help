@@ -35,6 +35,7 @@ String capitalize(String text) {
       })
       .toList()
       .join(" ");
+  print(newText);
   return newText;
 }
 

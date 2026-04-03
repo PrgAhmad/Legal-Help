@@ -12,6 +12,7 @@ class MyDobInput extends StatefulWidget {
 
 class _MyDobInputState extends State<MyDobInput> {
   DateTime? dob;
+  @override
   Widget build(BuildContext context) {
     return Column(
       spacing: 10,
@@ -32,6 +33,18 @@ class _MyDobInputState extends State<MyDobInput> {
               initialDate: DateTime.now(),
               firstDate: DateTime(1990),
               lastDate: DateTime.now(),
+              builder: (context, child) {
+                return Theme(
+                  data: ThemeData(
+                    colorScheme: ColorScheme.dark(
+                      primary: Theme.of(context).colorScheme.primary,
+                      onPrimary: Theme.of(context).colorScheme.tertiary,
+                      surface: Theme.of(context).colorScheme.surface
+                    ),
+                  ),
+                  child: child!,
+                );
+              },
             );
             widget.onDateSelected(date!);
             dob = date!;

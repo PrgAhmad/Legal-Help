@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/routes.dart';
 import 'package:frontend/screens/authentication/lawyer/address_details.dart';
 import 'package:frontend/screens/authentication/user/next_register.dart';
 import 'package:frontend/screens/authentication/widgets/my_button.dart';
@@ -7,7 +8,9 @@ import 'package:frontend/screens/authentication/widgets/my_dob_input.dart';
 import 'package:frontend/screens/authentication/widgets/my_drop_down.dart';
 import 'package:frontend/screens/authentication/widgets/my_input.dart';
 import 'package:frontend/screens/authentication/widgets/my_radio_button.dart';
+import 'package:frontend/service/form_validation.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
+import 'package:frontend/widgets/my_text.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -15,6 +18,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final formKey = GlobalKey<FormState>();
+  bool isLawyer = false;
+  bool isHide = true;
   TextEditingController fullNameCtrl = TextEditingController();
   TextEditingController emailIdCtrl = TextEditingController();
   TextEditingController mobileNoCtrl = TextEditingController();
@@ -32,25 +38,28 @@ class _RegisterState extends State<Register> {
     "gender": "",
   };
 
-  bool isLaywer = false;
-
   void setIsLawyer(bool val) {
     setState(() {
-      isLaywer = val;
+      isLawyer = val;
     });
   }
 
-  bool isHide = true;
-
+  
+  
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: MyAppBar(context, title: "Registration"),
+      appBar: MyAppBar(
+        context,
+        title: "Registration",
+        titleSpacing: 15,
+        fontSize: 18,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Form(
-            // key: ,
+            key: formKey,
             child: Column(
               spacing: 10,
               children: [
@@ -59,6 +68,7 @@ class _RegisterState extends State<Register> {
                   hintText: "Enter your full name",
                   controller: fullNameCtrl,
                   prefixIcon: Icons.person,
+                  validator: validateName,
                 ),
                 MyInput(
                   labelText: "Email Id",
@@ -66,6 +76,7 @@ class _RegisterState extends State<Register> {
                   inputType: TextInputType.emailAddress,
                   controller: emailIdCtrl,
                   prefixIcon: Icons.email,
+                  validator: validateEmail,
                 ),
                 MyInput(
                   labelText: "Mobile Number",
@@ -73,6 +84,7 @@ class _RegisterState extends State<Register> {
                   inputType: TextInputType.number,
                   controller: mobileNoCtrl,
                   prefixIcon: Icons.phone,
+                  validator: validatePhone,
                 ),
                 MyInput(
                   labelText: "Password",
@@ -80,6 +92,7 @@ class _RegisterState extends State<Register> {
                   controller: passwordCtrl,
                   prefixIcon: Icons.lock,
                   obscureText: isHide,
+                  validator: validatePassword,
                   suffixIcon: GestureDetector(
                     onTap: () {
                       setState(() {
@@ -100,6 +113,12 @@ class _RegisterState extends State<Register> {
                   obscureText: true,
                   controller: confirmPassCtrl,
                   prefixIcon: Icons.lock,
+                  validator: (text) {
+                    if (text != passwordCtrl.text) {
+                      return "Should be match with password";
+                    }
+                    return null;
+                  },
                 ),
                 MyDobInput(
                   onDateSelected: (date) {
@@ -110,11 +129,11 @@ class _RegisterState extends State<Register> {
                 MyDropDown(
                   controller: genderCtrl,
                   labelText: "Gender",
-                  hintText: "Select you gender",
+                  hintText: "Select your gender",
                   icon: Icons.group,
                   entries: ["Male", "Female", "Others"],
                 ),
-                MyRadioButton(isLawyer: isLaywer, setIsLawyer: setIsLawyer),
+                MyRadioButton(isLawyer: isLawyer, setIsLawyer: setIsLawyer),
                 MyButton(
                   "Next",
                   icon: Icons.arrow_forward,
@@ -127,19 +146,27 @@ class _RegisterState extends State<Register> {
                       "dateOfBirth": dobCtrl.toString().split(" ")[0],
                       "gender": genderCtrl.text.trim(),
                     };
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          if (isLaywer) {
-                            return AddressDetails(formData);
-                          } else {
-                            return UserNextRegister(formData);
-                          }
-                        },
-                      ),
-                    );
+                    if (formKey.currentState!.validate()) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            if (isLawyer) {
+                              return AddressDetails(formData);
+                            } else {
+                              return UserNextRegister(formData);
+                            }
+                          },
+                        ),
+                      );
+                    }
                   },
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, MyRoutes.login);
+                  },
+                  child: MyText("Already have an account? Login", fontSize: 12),
                 ),
               ],
             ),

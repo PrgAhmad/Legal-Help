@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,6 +12,8 @@ class MyInput extends StatefulWidget {
   IconData prefixIcon;
   Widget? suffixIcon;
   bool? obscureText;
+  String? Function(String?)? validator;
+  void Function(String)? onChanged;
   MyInput({
     required this.hintText,
     required this.labelText,
@@ -20,6 +23,8 @@ class MyInput extends StatefulWidget {
     required this.prefixIcon,
     this.suffixIcon,
     this.obscureText,
+    this.validator,
+    this.onChanged
   });
 
   @override
@@ -64,17 +69,26 @@ class _MyInputState extends State<MyInput> {
                   style: GoogleFonts.poppins(
                     color: Theme.of(context).colorScheme.tertiary,
                     fontSize: 13,
+                    letterSpacing: widget.prefixIcon == Icons.phone ? 3 : 1
                   ),
-                  keyboardType: widget.inputType ?? widget.inputType,
+                  onChanged: widget.onChanged,
+                  validator: widget.validator,
+                  keyboardType: widget.inputType,
                   obscureText:
                       widget.obscureText == null ? false : widget.obscureText!,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    errorStyle: GoogleFonts.poppins(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w400,
+                      height: 2,
+                    ),
                     hintText: widget.hintText!,
                     border: InputBorder.none,
                     hintStyle: GoogleFonts.poppins(
                       color: Theme.of(context).colorScheme.scrim,
                       fontSize: 12.5,
+                      letterSpacing: 0
                     ),
                   ),
                 ),

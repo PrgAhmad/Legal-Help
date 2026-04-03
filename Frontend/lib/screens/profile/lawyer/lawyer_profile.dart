@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/profile/user/widgets/app_settings_section.dart';
-import 'package:frontend/screens/profile/user/widgets/my_legal_resources_section.dart';
+import 'package:frontend/screens/profile/user/widgets/legal_resources.dart';
 import 'package:frontend/screens/profile/user/widgets/sub_profile.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
 import 'package:frontend/widgets/my_bottom_navigation_bar.dart';
@@ -32,7 +32,7 @@ class LawyerProfileState extends State<LawyerProfile> {
                 fontWeight: FontWeight.w700,
                 textAlign: TextAlign.left,
               ),
-              MyLegalResourcesSection(),
+              LegalResources(),
               MyText(
                 "App Settings",
                 fontSize: 16,

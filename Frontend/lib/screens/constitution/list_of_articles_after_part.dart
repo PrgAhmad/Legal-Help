@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/models/indian_constituiton_model.dart';
+import 'package:frontend/constants/constants.dart';
+import 'package:frontend/models/constitution_model.dart';
 import 'package:frontend/widgets/bottom_details.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
 import 'package:frontend/widgets/my_container.dart';
@@ -31,7 +32,7 @@ class _ListOfArticlesAfterPartState extends State<ListOfArticlesAfterPart> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: MyAppBar(context, title: "Indian Constitution", fontSize: 14.5),
+      appBar: MyAppBar(context, title: indianConstitutions["name"], fontSize: 14.5),
       body: Column(
         children: [
           Expanded(
@@ -48,7 +49,7 @@ class _ListOfArticlesAfterPartState extends State<ListOfArticlesAfterPart> {
                 ),
                 itemCount: widget.articles.length,
                 itemBuilder: (context, idx) {
-                  IndianConstitutionModel eachArticle = widget.articles[idx];
+                  ConstitutionModel eachArticle = widget.articles[idx];
                   return Padding(
                     padding: EdgeInsets.only(bottom: 10),
                     child: InkWell(

@@ -7,6 +7,7 @@ import 'package:frontend/screens/authentication/lawyer/widget/expertise.dart';
 import 'package:frontend/screens/authentication/widgets/my_button.dart';
 import 'package:frontend/screens/authentication/widgets/my_drop_down.dart';
 import 'package:frontend/screens/authentication/widgets/my_input.dart';
+import 'package:frontend/service/form_validation.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
 import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
@@ -20,6 +21,7 @@ class Professional extends StatefulWidget {
 }
 
 class _ProfessionalState extends State<Professional> {
+  final formKey = GlobalKey<FormState>();
   TextEditingController barCouncilIdCtrl = TextEditingController();
   TextEditingController specializationCtrl = TextEditingController();
   TextEditingController otherSpecializationCtrl = TextEditingController();
@@ -35,11 +37,12 @@ class _ProfessionalState extends State<Professional> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: MyAppBar(context, title: "Professional"),
+      appBar: MyAppBar(context, title: "Professional", titleSpacing: 15, fontSize: 18),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Form(
+            key: formKey,
             child: Column(
               spacing: 10,
               children: [
@@ -48,6 +51,7 @@ class _ProfessionalState extends State<Professional> {
                   hintText: "Enter your bar council id",
                   controller: barCouncilIdCtrl,
                   prefixIcon: Icons.numbers,
+                  validator: validateBarCouncilId,
                 ),
                 MyInput(
                   labelText: "Fees",
@@ -55,6 +59,7 @@ class _ProfessionalState extends State<Professional> {
                   controller: feesCtrl,
                   inputType: TextInputType.number,
                   prefixIcon: Icons.currency_rupee_rounded,
+                  validator: validateFees,
                 ),
                 MyDropDown(
                   labelText: "Specialization",
@@ -84,29 +89,33 @@ class _ProfessionalState extends State<Professional> {
                   "Next",
                   icon: Icons.arrow_forward,
                   onTap: () {
-                    Map formData = {
-                      ...widget.formData,
-                      "barCouncilId": formatText(barCouncilIdCtrl),
-                      "specialization": formatText(
-                        isOtherSpecialization
-                            ? otherSpecializationCtrl
-                            : specializationCtrl,
-                      ),
-                      "experties": expertise,
-                      "fees": formatText(feesCtrl),
-                    };
-                    print(formData);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Introduction(formData),
-                      ),
-                    );
+                   if(formKey.currentState!.validate()){
+                     Map formData = {
+                       ...widget.formData,
+                      "professional":{
+                        "barCouncilId": formatText(barCouncilIdCtrl),
+                        "specialization": formatText(
+                          isOtherSpecialization
+                              ? otherSpecializationCtrl
+                              : specializationCtrl,
+                        ),
+                        "expertise": expertise,
+                        "fees": int.parse(formatText(feesCtrl)),
+                      }
+                     };
+                     print(formData);
+                     Navigator.push(
+                       context,
+                       MaterialPageRoute(
+                         builder: (context) => Introduction(formData),
+                       ),
+                     );
+                   }
                   },
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, MyRoutes.login);
+                    Navigator.pushReplacementNamed(context, MyRoutes.login);
                   },
                   child: MyText("Already have an account? Login", fontSize: 12),
                 ),
@@ -117,4 +126,5 @@ class _ProfessionalState extends State<Professional> {
       ),
     );
   }
+
 }

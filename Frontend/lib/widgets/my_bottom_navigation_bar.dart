@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/routes.dart';
+import 'package:frontend/service/chatbot_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,6 +15,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   int? navIdx;
   SharedPreferences? pref;
   bool isLawyer = false;
+  ChatbotService chatbotService = ChatbotService();
   @override
   void initState() {
     super.initState();
@@ -55,12 +57,13 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
           fontWeight: FontWeight.w700,
         ),
         currentIndex: navIdx ?? 0,
-        onTap: (int idx) {
+        onTap: (int idx)async{
           switch (idx) {
             case 0:
               Navigator.pushReplacementNamed(context, MyRoutes.home);
               break;
             case 1:
+              chatbotService.saveChatId("");
               Navigator.pushReplacementNamed(context, MyRoutes.chatbot);
               break;
             case 2:

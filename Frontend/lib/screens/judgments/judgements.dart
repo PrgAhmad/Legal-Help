@@ -1,11 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/constants/courts.dart';
-import 'package:frontend/constants/judgments.dart';
 import 'package:frontend/screens/judgments/list_of_judgment.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
 import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
+import 'package:http/http.dart' as http;
 
 class Judgements extends StatefulWidget {
   const Judgements({super.key});
@@ -35,7 +36,11 @@ class _JudgmentsState extends State<Judgements> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ListOfJudgment()),
+                  MaterialPageRoute(
+                    builder:
+                        (context) =>
+                            ListOfJudgment(courtName: courts[idx]["courtNick"]),
+                  ),
                 );
               },
               child: MyContainer(

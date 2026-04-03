@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/constants/constants.dart';
-import 'package:frontend/models/indian_constituiton_model.dart';
+import 'package:frontend/models/constitution_model.dart';
 import 'package:frontend/screens/constitution/list_of_articles_after_part.dart';
 import 'package:frontend/widgets/bottom_details.dart';
 import 'package:frontend/widgets/my_app_bar.dart';
@@ -29,7 +29,7 @@ class _ListOfPartsState extends State<ListOfParts> {
     );
     List jsonData = await jsonDecode(stringData);
     indianConstitution =
-        jsonData.map((el) => IndianConstitutionModel.fromJson(el)).toList();
+        jsonData.map((el) => ConstitutionModel.fromJson(el)).toList();
     originalList = indianConstitution;
     partNo =
         indianConstitution

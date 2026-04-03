@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/constants/constants.dart';
 import 'package:frontend/routes.dart';
 import 'package:frontend/screens/profile/user/user_profile.dart';
+import 'package:frontend/service/person_data.dart';
 import 'package:frontend/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/screens/profile/lawyer/lawyer_profile.dart';
@@ -19,10 +20,14 @@ class LegalHelp extends StatefulWidget {
 
 class _LegalHelpState extends State<LegalHelp> {
   SharedPreferences? pref;
+  PersonData personData = PersonData();
+  String initialRoute = MyRoutes.home;
+
   @override
   void initState() {
     super.initState();
     initPref();
+    initCheck();
   }
 
   void initPref() async {
@@ -31,6 +36,20 @@ class _LegalHelpState extends State<LegalHelp> {
       pref!.setBool(themeMode, true);
     }
     setState(() {});
+  }
+
+  void initCheck() async{
+    final data = await personData.getPersonData();
+    if(data == null){
+      initialRoute = MyRoutes.login;
+    }else{
+      initialRoute = MyRoutes.home;
+    }
+    setState(() {
+      print(initialRoute);
+    });
+    print("Data : ");
+    print(data);
   }
 
   void reload() {
@@ -54,7 +73,7 @@ class _LegalHelpState extends State<LegalHelp> {
         MyRoutes.userProfile: (context) => UserProfile(reload),
         MyRoutes.lawyerProfile: (context) => LawyerProfile(reload),
       },
-      initialRoute: MyRoutes.home,
+      initialRoute: initialRoute,
       color: Theme.of(context).colorScheme.secondary,
     );
   }

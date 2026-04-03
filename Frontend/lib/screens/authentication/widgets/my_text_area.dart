@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/service/ai_service.dart';
 import 'package:frontend/widgets/my_text.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,7 +11,9 @@ class MyTextArea extends StatefulWidget {
   IconData? suffixIcon;
   int maxLines;
   int minLines;
+  String? Function(String?)? validator;
   MyTextArea({
+    super.key,
     required this.hintText,
     required this.labelText,
     required this.controller,
@@ -18,6 +21,7 @@ class MyTextArea extends StatefulWidget {
     this.suffixIcon,
     this.maxLines = 1,
     this.minLines = 2,
+    this.validator,
   });
 
   @override
@@ -25,6 +29,9 @@ class MyTextArea extends StatefulWidget {
 }
 
 class _MyTextAreaState extends State<MyTextArea> {
+  @override
+  AiService aiService = AiService();
+
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,8 +75,12 @@ class _MyTextAreaState extends State<MyTextArea> {
                   ),
                   minLines: widget.minLines,
                   maxLines: widget.maxLines,
+                  validator: widget.validator,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 10,
+                    ),
                     hintText: widget.hintText!,
                     border: InputBorder.none,
                     hintStyle: GoogleFonts.poppins(
@@ -80,9 +91,22 @@ class _MyTextAreaState extends State<MyTextArea> {
                 ),
               ),
               if (widget.suffixIcon != null)
-                Padding(
-                  padding: EdgeInsets.only(right: 10, top: 10),
-                  child: Icon(widget.suffixIcon ?? Icons.e_mobiledata),
+                GestureDetector(
+                  onTap: () async{
+                    if(widget.suffixIcon == Icons.auto_awesome_rounded){
+                        String res = await aiService.enhanceIntro(widget.controller.text);
+                        if(res.isNotEmpty){
+                          widget.controller.text = res;
+                          setState(() {
+
+                          });
+                        }
+                    }
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 10, top: 10),
+                    child: Icon(widget.suffixIcon ?? Icons.e_mobiledata),
+                  ),
                 ),
             ],
           ),

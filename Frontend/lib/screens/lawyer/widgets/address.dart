@@ -3,6 +3,7 @@ import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
 
 Widget Address(BuildContext context, {required Map lawyer}) {
+  Map address = lawyer["address"];
   return MyContainer(
     width: MediaQuery.of(context).size.width,
     padding: EdgeInsets.all(14),
@@ -32,7 +33,7 @@ Widget Address(BuildContext context, {required Map lawyer}) {
           spacing: 6,
           children: [
             MyText(
-              lawyer['officeAddress'] ??
+              address['officeAddress'] ??
                   'Bhartiya Kamla Nagar Salt Pen Road Wadala',
               fontSize: 12,
               fontWeight: FontWeight.w500,
@@ -42,14 +43,20 @@ Widget Address(BuildContext context, {required Map lawyer}) {
               spacing: 4,
               children: [
                 MyText(
-                  '${lawyer["district"] ?? 'Mumbai'}',
-                  fontSize: 11,
+                  '${address["city"] ?? 'Mumbai'}',
+                  fontSize: 11.2,
                   textAlign: TextAlign.left,
                 ),
-                MyText(',', fontSize: 11),
+                MyText(',', fontSize: 11.2),
                 MyText(
-                  '${lawyer["state"] ?? 'Maharashtra'}',
-                  fontSize: 11,
+                  '${address["state"] ?? 'Maharashtra'}',
+                  fontSize: 11.2,
+                  textAlign: TextAlign.left,
+                ),
+                MyText(',', fontSize: 11.2),
+                MyText(
+                  '${address["pincode"] ?? 'Maharashtra'}',
+                  fontSize: 11.2,
                   textAlign: TextAlign.left,
                 ),
               ],

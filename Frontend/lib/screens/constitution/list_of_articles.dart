@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/constants/constants.dart';
-import 'package:frontend/models/indian_constituiton_model.dart';
+import 'package:frontend/models/constitution_model.dart';
 import 'package:frontend/screens/constitution/widgets/my_search.dart';
 import 'package:frontend/widgets//my_text.dart';
 import 'package:frontend/widgets/bottom_details.dart';
@@ -27,7 +27,7 @@ class _ListOfArticlesState extends State<ListOfArticles> {
     );
     List jsonData = await jsonDecode(stringData);
     indianConstitution =
-        jsonData.map((el) => IndianConstitutionModel.fromJson(el)).toList();
+        jsonData.map((el) => ConstitutionModel.fromJson(el)).toList();
     originalList = indianConstitution;
     setState(() {});
   }
@@ -56,14 +56,14 @@ class _ListOfArticlesState extends State<ListOfArticles> {
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     itemCount: indianConstitution.length,
                     itemBuilder: (context, idx) {
-                      IndianConstitutionModel article = indianConstitution[idx];
+                      ConstitutionModel article = indianConstitution[idx];
                       return Padding(
                         padding: EdgeInsets.only(bottom: 10),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(10),
                           onTap: () {
-                            IndianConstitutionModel eachArticle =
-                                IndianConstitutionModel(
+                            ConstitutionModel eachArticle =
+                                ConstitutionModel(
                                   articleNo: article.articleNo,
                                   articleTitle: article.articleTitle,
                                   articleContent: article.articleContent,

@@ -10,12 +10,12 @@ import 'package:frontend/widgets/my_text.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-class MyChatInputBox extends StatefulWidget {
+class ChatInputBox extends StatefulWidget {
   TextEditingController controller;
   Function()? onTap;
   bool isGenerating;
   Function(int, int) setApiUrl;
-  MyChatInputBox({
+  ChatInputBox({
     super.key,
     required this.controller,
     this.onTap,
@@ -24,10 +24,10 @@ class MyChatInputBox extends StatefulWidget {
   });
 
   @override
-  State<MyChatInputBox> createState() => _MyChatInputBoxState();
+  State<ChatInputBox> createState() => _ChatInputBoxState();
 }
 
-class _MyChatInputBoxState extends State<MyChatInputBox> {
+class _ChatInputBoxState extends State<ChatInputBox> {
   final debouncer = Debouncer(milliseconds: 500);
   double height = 45;
   double? inputHeight;

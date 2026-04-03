@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/profile/user/saved_sections.dart';
+import 'package:frontend/screens/profile/user/saved_sections/saved_sections.dart';
 import 'package:frontend/screens/profile/user/widgets/profile_menu_item.dart';
 import 'package:frontend/service/local_database.dart';
 import 'package:frontend/widgets/my_container.dart';
 
-class MyLegalResources extends StatelessWidget {
+class LegalResources extends StatelessWidget {
   LawBookmark lawBookmark = LawBookmark();
   @override
   Widget build(BuildContext context) {

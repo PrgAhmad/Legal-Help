@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:frontend/widgets/my_container.dart';
 import 'package:frontend/widgets/my_text.dart';
 
-Widget Welcome(context){
+Widget Welcome(context,fullName){
   return InkWell(
     onTap: (){},
     borderRadius: BorderRadius.circular(10),
@@ -20,13 +20,13 @@ Widget Welcome(context){
               SizedBox(height: 20),
               MyText(
                 "Hello,",
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.w700,
                 textAlign: TextAlign.left,
               ),
               MyText(
-                "Ahmad!",
-                fontSize: 20,
+                fullName,
+                fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),
               Container(
